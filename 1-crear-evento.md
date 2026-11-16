@@ -12,11 +12,11 @@ Abre [serverless.yml](serverless.yml) y busca `functions → crearEvento`.
 
 ```yaml
 crearEvento:
-  name: ${self:service}-${sls:stage}-crearEvento
+  name: ${self:service}-${self:provider.stage}-crearEvento
   handler: src/eventos/crear-evento/handler.handler
 ```
 
-Con el equipo `equipo01`, la función se llama `festival-check-in-equipo01-crearEvento`. En `handler.handler`, el primer `handler` es el nombre del archivo y el segundo es la función que exporta. Tú la invocarás con AWS CLI.
+`${self:service}` lee `service` y `${self:provider.stage}` lee `stage` dentro de `provider`. Ambas referencias buscan el valor en este mismo YAML. Con el equipo `equipo01`, la función se llama `festival-check-in-equipo01-crearEvento`. En `handler.handler`, el primer `handler` es el nombre del archivo y el segundo es la función que exporta. Tú la invocarás con AWS CLI.
 
 | Abre en este orden | Qué ocurre |
 | --- | --- |
