@@ -202,7 +202,10 @@ Si falla solo la carga o la prueba, corrige el error y vuelve a ejecutar este ú
 
 ## 6. Comprueba el resultado
 
-Lee el evento directamente desde DynamoDB:
+### Lee el evento por su clave
+
+`npm run aula` acaba de cargar el evento **1**. Ahora compruebas qué quedó guardado. DynamoDB puede localizar un ítem cuando le das **la tabla y su clave primaria completa**. En `FCI_EVENTOS` la clave tiene un solo campo, `EVENT_ID`.
+
 
 ```bash
 aws dynamodb get-item \
@@ -212,4 +215,30 @@ aws dynamodb get-item \
   --consistent-read --query 'Item' --output json
 ```
 
-Comprueba que el ítem contiene **`EVENT_ID = 1`** y **`TITLE = Festival de otoño`**. En la pantalla del festival, elige **AWS**, pega la URL del paso anterior y consulta el evento **1** para **`usuario-02`**. Debe aparecer **Inscrito**. [Abrir la pantalla del festival](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#pantalla)
+Lee el comando en el mismo orden en que lo escribes:
+
+| Parte del comando | Qué le estás pidiendo |
+| --- | --- |
+| `aws dynamodb get-item` | «Dame el ítem que corresponde a esta clave primaria». |
+| `--table-name "FCI_EVENTOS_${FCI_EQUIPO}"` | Abre la tabla de eventos de tu equipo. Si tu código es `equipo01`, el nombre será `FCI_EVENTOS_equipo01`. |
+| `--profile "$AWS_PROFILE" --region "$AWS_REGION"` | Usa la sesión del laboratorio y busca la tabla en la región del despliegue. |
+| `--key '{"EVENT_ID":{"N":"1"}}'` | Busca la clave `EVENT_ID` con valor numérico `1`. En el formato de AWS CLI, `N` significa número y sus cifras se escriben entre comillas. |
+| `--consistent-read` | Pide una lectura fuerte para que se refleje la escritura que acaba de confirmar DynamoDB. |
+| `--query 'Item' --output json` | AWS CLI toma el campo `Item` de la respuesta y lo muestra en JSON. La búsqueda por clave ya se hizo con `--key`. |
+
+La barra `\` al final de una línea le indica a Bash que el comando continúa en la siguiente. [Referencia de GetItem](https://docs.aws.amazon.com/cli/latest/reference/dynamodb/get-item.html) · [Consistencia de lectura en DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html)
+
+Con el ID de ejemplo, espera un resultado como este:
+
+```json
+{
+  "EVENT_ID": { "N": "1" },
+  "TITLE": { "S": "Festival de otoño" }
+}
+```
+
+Aquí `S` significa texto. **Antes de avanzar**, localiza el ID numérico y el título. Si ves `null`, comprueba el equipo, la región y que `npm run aula` haya cargado el evento 1.
+
+### Comprueba el mismo evento en la pantalla
+
+En la pantalla del festival, elige **AWS**, pega la URL del paso anterior y consulta el evento **1** para **`usuario-02`**. Debe aparecer **Inscrito**. [Abrir la pantalla del festival](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#pantalla)
