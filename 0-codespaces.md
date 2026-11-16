@@ -55,7 +55,7 @@ npm ci
 npm ls serverless --depth=0
 ```
 
-**Antes de avanzar**, busca `serverless@4.45.0` en la salida de npm.
+**Antes de avanzar**, busca `serverless@3.40.0` en la salida de npm.
 
 ## 3. Conecta AWS Academy desde el Codespace
 
@@ -98,24 +98,6 @@ export LAMBDA_ROLE_ARN
 ```
 
 Si el laboratorio deniega `iam:GetRole`, usa el ARN completo de LabRole que te facilite el profesor.
-
-### Autentica Serverless Framework v4
-
-La rama `main` instala **Serverless Framework 4.45.0**, que requiere autenticación con Serverless para desplegar. La prueba local de la rama `local` usa **Serverless Framework 3.40.0 y Serverless Offline**. Esa prueba arranca sin iniciar sesión en Serverless. [Requisito de autenticación de la v4](https://www.serverless.com/framework/docs/guides/upgrading-v4#authentication-requirement)
-
-En el primer uso de Serverless v4 en el Codespace, ejecuta este comando. Abre en el navegador el enlace que muestra la terminal y completa el acceso. [Inicio de sesión en Serverless Framework](https://www.serverless.com/framework/docs/getting-started#signing-in)
-
-```bash
-npx --no-install serverless login
-```
-
-Si el inicio de sesión del navegador se bloquea, puedes generar una clave personal en **Serverless Dashboard → Settings → Access Keys**, cargarla en la terminal y continuar. Es la clave de Serverless Framework. Conserva el perfil `academy` para AWS. [Autenticación de Serverless en terminales remotas](https://www.serverless.com/framework/docs/guides/dashboard/cicd/running-in-your-own-cicd)
-
-```bash
-read -rsp 'Clave de Serverless Framework: ' SERVERLESS_ACCESS_KEY
-printf '\n'
-export SERVERLESS_ACCESS_KEY
-```
 
 En esa misma terminal, despliega:
 

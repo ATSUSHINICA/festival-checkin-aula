@@ -15,6 +15,6 @@
     "dynamodb-toolbox": "2.11.1"
   },
   "devDependencies": {
-    "serverless": "4.45.0"
+    "serverless": "3.40.0"
   }
 }

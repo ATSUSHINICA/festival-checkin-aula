@@ -62,9 +62,9 @@ npm ls serverless --depth=0
 
 Aquí clonas un proyecto que ya trae `package-lock.json`. Usa **`npm ci`** para reconstruir `node_modules` con las versiones fijadas en ese archivo. npm detiene la instalación si el archivo de bloqueo y `package.json` están desincronizados.
 
-**`npm ls serverless --depth=0`** muestra la versión de Serverless instalada en esta carpeta. `ls` significa «listar» y `--depth=0` limita la salida a las dependencias directas del proyecto. Debes ver **`serverless@4.45.0`**.
+**`npm ls serverless --depth=0`** muestra la versión de Serverless instalada en esta carpeta. `ls` significa «listar» y `--depth=0` limita la salida a las dependencias directas del proyecto. Debes ver **`serverless@3.40.0`**.
 
-Cuando estás creando un proyecto y quieres **añadir o cambiar** una dependencia, usas `npm install`. Por ejemplo, `npm install --save-dev --save-exact serverless@4.45.0` añade Serverless como herramienta de desarrollo y actualiza `package.json` y `package-lock.json`. En este clon esos cambios ya están guardados.
+Cuando estás creando un proyecto y quieres **añadir o cambiar** una dependencia, usas `npm install`. Por ejemplo, `npm install --save-dev --save-exact serverless@3.40.0` añade Serverless como herramienta de desarrollo y actualiza `package.json` y `package-lock.json`. En este clon esos cambios ya están guardados.
 
 En el paso 5 usarás `npx --no-install serverless --version` para **arrancar la CLI** con las variables del laboratorio ya cargadas. Aquí solo compruebas qué versión quedó instalada.
 
@@ -142,15 +142,7 @@ En `serverless.yml`, el código de equipo se convierte en el entorno de Serverle
 
 ## 5. Despliega y carga los datos de ejemplo
 
-### Accede a Serverless Framework
-
-En el primer uso en un equipo nuevo, abre el inicio de sesión del Framework desde la raíz del clon:
-
-```bash
-npx --no-install serverless login
-```
-
-En el navegador, inicia sesión o registra tu cuenta de Serverless Framework y vuelve a la terminal cuando se complete. Si ya tienes la sesión iniciada, continúa con el despliegue. El acceso de Serverless habilita su CLI. La sesión del Learner Lab proporciona las credenciales para desplegar en AWS. [Inicio de sesión de Serverless Framework](https://www.serverless.com/framework/docs/getting-started#signing-in)
+### Comprueba Serverless Framework
 
 En la misma terminal, verifica que inicia la CLI con la configuración del proyecto:
 
@@ -158,7 +150,7 @@ En la misma terminal, verifica que inicia la CLI con la configuración del proye
 npx --no-install serverless --version
 ```
 
-Debe mostrar la versión del Framework. Si aparece un error al resolver una variable del YAML, vuelve al paso 4 y recupera los valores en esa terminal.
+Debe mostrar `Framework Core: 3.40.0`. Si aparece un error al resolver una variable del YAML, vuelve al paso 4 y recupera los valores en esa terminal.
 
 ### Despliega tu entorno y carga los datos
 

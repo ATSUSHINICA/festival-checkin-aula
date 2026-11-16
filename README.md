@@ -31,7 +31,7 @@ npm ci
 npm ls serverless --depth=0
 ```
 
-`npm ci` instala las versiones fijadas en `package-lock.json`. Cuando termine la instalación, el segundo comando lista Serverless como dependencia directa y debe mostrar `serverless@4.45.0`. [Cuándo usar cada comando](0-conf.md#2-clona-e-instala-el-proyecto)
+`npm ci` instala las versiones fijadas en `package-lock.json`. Cuando termine la instalación, el segundo comando lista Serverless como dependencia directa y debe mostrar `serverless@3.40.0`. [Cuándo usar cada comando](0-conf.md#2-clona-e-instala-el-proyecto)
 
 ## 2. Configura tu sesión
 
@@ -60,7 +60,7 @@ Si aparece el ARN de `LabRole`, expórtalo:
 export LAMBDA_ROLE_ARN
 ```
 
-Si el laboratorio deniega `iam:GetRole`, exporta `LAMBDA_ROLE_ARN` con el ARN completo de LabRole que te facilite el profesor. Si Serverless te pide iniciar sesión, ejecuta `npx serverless login` y completa el acceso en el navegador. Son dos accesos distintos. Serverless autentica su herramienta y AWS CLI utiliza la sesión de Academy.
+Si el laboratorio deniega `iam:GetRole`, exporta `LAMBDA_ROLE_ARN` con el ARN completo de LabRole que te facilite el profesor.
 
 ## 3. Despliega y prueba
 
