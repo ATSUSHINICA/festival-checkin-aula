@@ -103,12 +103,26 @@ aws sts get-caller-identity --profile "$AWS_PROFILE" --region "$AWS_REGION"
 
 Avanza cuando la salida muestre `Account` y `Arn`. Si aparece `ExpiredToken`, recupera los tres valores vigentes de AWS Details, sustituye los anteriores y repite la comprobación.
 
+### Averigua qué rol usará Lambda
+
+Tu perfil `academy` identifica la sesión con la que haces la consulta. **`LabRole`** es el rol que usará Lambda al ejecutar tu código, por ejemplo para acceder a DynamoDB. Serverless necesita su **ARN**, el identificador completo del rol en AWS.
+
 ```bash
 LAMBDA_ROLE_ARN="$(aws iam get-role --role-name LabRole \
   --profile "$AWS_PROFILE" --region "$AWS_REGION" \
   --query 'Role.Arn' --output text)"
 printf 'Rol de Lambda: %s\n' "$LAMBDA_ROLE_ARN"
 ```
+
+| Parte del comando | Qué hace |
+| --- | --- |
+| `aws iam get-role --role-name LabRole` | Le pide a AWS los datos del rol existente llamado `LabRole`. |
+| `--profile "$AWS_PROFILE" --region "$AWS_REGION"` | Ejecuta la consulta con el perfil y la configuración de región que preparaste. |
+| `--query 'Role.Arn' --output text` | De la respuesta de IAM extrae solo `Arn`, que está dentro de `Role`, y lo devuelve como texto. |
+| `LAMBDA_ROLE_ARN="$(...)"` | Bash ejecuta lo que va entre `$(...)` y guarda su salida en la variable. |
+| `printf 'Rol de Lambda: %s\n' "$LAMBDA_ROLE_ARN"` | Muestra el valor guardado. `%s` se sustituye por el ARN y `\n` añade un salto de línea. |
+
+Después de exportar la variable, Serverless sustituye `${env:LAMBDA_ROLE_ARN}` por ese ARN en `provider.iam.role` al desplegar. [Consulta del rol en AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/iam/get-role.html) · [Rol de ejecución de Lambda](https://docs.aws.amazon.com/lambda/latest/dg/lambda-intro-execution-role.html)
 
 Si aparece un ARN que termina en `:role/LabRole`, expórtalo:
 
