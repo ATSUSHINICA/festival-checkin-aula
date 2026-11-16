@@ -11,7 +11,7 @@ npm --version
 aws --version
 ```
 
-Debes tener Git, Node.js 20 o superior y AWS CLI v2. Si falta alguna herramienta, instálala y vuelve a abrir la terminal. Node 22 es el entorno configurado en AWS Lambda. Puedes usar el Node compatible que ya tengas instalado en tu ordenador. [Git](https://git-scm.com/install) · [Node.js](https://nodejs.org/en/download) · [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+Debes tener Git, Node.js 20 o superior y AWS CLI v2. Si falta alguna herramienta, instálala y vuelve a abrir la terminal. Node 22 es el entorno configurado en AWS Lambda. Si ya tienes Node 20, 22, 24 o 26, usa esa versión en tu ordenador y ejecuta `npm ci && npm test` directamente. [Git](https://git-scm.com/install) · [Node.js](https://nodejs.org/en/download) · [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 ## 2. Clona e instala el proyecto
 
@@ -38,7 +38,9 @@ npm ci && npm test
 
 La ruta debe terminar en `festival-checkin-01` y la prueba local debe mostrar **`pass 1` y `fail 0`**. La prueba recorre los cuatro handlers con DynamoDB simulado.
 
-Si tu equipo tiene Node 18 y ya tienes `npm` y `npx`, puedes usar Node 22 para esta práctica:
+### Alternativa para equipos con Node anterior a 20
+
+Si tienes una versión anterior a Node 20 y dispones de `npm` y `npx`, usa Node 22 solo para esta práctica.
 
 ```bash
 npx --yes --package=node@22 -- npm ci &&
