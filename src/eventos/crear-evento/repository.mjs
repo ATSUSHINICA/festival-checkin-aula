@@ -1,5 +1,5 @@
 import { PutItemCommand } from 'dynamodb-toolbox/entity/actions/put';
-import { MODELO_EVENTO } from '../evento.model.mjs';
+import { MODELO_EVENTO } from '../persistencia/evento.model.mjs';
 
 export async function guardarEvento(eventId, title) {
   const evento = {

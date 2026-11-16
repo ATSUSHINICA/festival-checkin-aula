@@ -1,5 +1,5 @@
 import { json } from '../peticion.mjs';
-import { buscarEvento } from '../../eventos/eventos.repository.mjs';
+import { buscarEvento } from '../../eventos/persistencia/eventos.repository.mjs';
 import { buscarInscripcion } from './repository.mjs';
 
 export async function consultarPase({ eventId, userId }) {

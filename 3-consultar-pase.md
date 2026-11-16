@@ -14,7 +14,7 @@ En [serverless.yml](serverless.yml), `functions → consultarPase → events →
 | --- | --- |
 | [Handler](src/pases/consultar-pase/handler.mjs) y [peticion.mjs](src/pases/peticion.mjs) | El handler delega en `handleRequest`. Este extrae los dos parámetros de la ruta, comprueba su formato y llama a `consultarPase`. |
 | [Service](src/pases/consultar-pase/service.mjs) | Busca primero el evento. Si falta, devuelve 404. Si existe, busca la inscripción y devuelve 200 con el título y el resultado de esa búsqueda. |
-| [Repositorio del evento](src/eventos/eventos.repository.mjs) | Lee el evento con `GetItemCommand` usando solo `EVENT_ID`. |
+| [Repositorio del evento](src/eventos/persistencia/eventos.repository.mjs) | Lee el evento con `GetItemCommand` usando solo `EVENT_ID`. |
 | [Repositorio del pase](src/pases/consultar-pase/repository.mjs) y [modelo Inscripcion](src/pases/inscripcion.model.mjs) | Usan Toolbox para leer el pase por la pareja `EVENT_ID` y `USER_ID`. Si el ítem aún no existe, el repositorio devuelve `null`. |
 
 Predice qué verá un visitante si existe el evento pero aún no está inscrito. [Consulta por capas y ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm)

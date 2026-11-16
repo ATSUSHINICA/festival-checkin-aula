@@ -80,13 +80,15 @@ Abre la [pantalla del festival](https://albertohdezakkari.github.io/04-PILARES-S
 
 ## 4. Sigue el código desde la petición hasta DynamoDB
 
+En `src/eventos/crear-evento/` están los archivos del alta. En `src/eventos/persistencia/` están el modelo que comparten el alta y la lectura, y el repositorio que reutilizan **Consultar pase** e **Inscribir usuario**.
+
 | Abre | Qué buscar |
 | --- | --- |
 | `serverless.yml` | Las cuatro funciones, las rutas GET y POST, las tres tablas y el índice `PorUsuario`. Los nombres de tabla llevan el código del equipo. |
 | `src/pases/consultar-pase/handler.mjs` | La entrada de API Gateway llama al caso de uso de consulta. |
 | `src/pases/consultar-pase/service.mjs` | Lee el evento y después el pase. Antes de inscribirse, `registration` vale `null`. |
 | `src/pases/inscribir-usuario/service.mjs` y `repository.mjs` | Comprueban las referencias y guardan la inscripción con una condición que protege frente a duplicados. |
-| `src/eventos/evento.model.mjs` y `src/pases/inscripcion.model.mjs` | DynamoDB Toolbox traduce `eventId` a `EVENT_ID` y `userId` a `USER_ID` sin cambiar las claves de las tablas. |
+| `src/eventos/persistencia/evento.model.mjs` y `src/pases/inscripcion.model.mjs` | DynamoDB Toolbox traduce `eventId` a `EVENT_ID` y `userId` a `USER_ID` sin cambiar las claves de las tablas. |
 | `src/datos/dynamo.mjs` | El cliente del SDK comparte la conexión y lee los nombres de tablas que inyecta Serverless. |
 
 Sigue en el cuaderno los pasos [Crear con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos-orm), [Consultar con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm) e [Inscribir con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm). El alta del perfil y la lectura de usuario conservan el SDK directo, tal como se muestran en el cuaderno.
