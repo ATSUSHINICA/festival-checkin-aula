@@ -217,20 +217,53 @@ aws dynamodb get-item \
   --consistent-read --query 'Item' --output json
 ```
 
-Lee el comando en el mismo orden en que lo escribes:
+#### Sigue el evento 1 de la petición a la pantalla
+
+**1 · Identifica la ficha con `--key`**
+
+Imagina una ficha que lleva el número **1**. Para encontrarla, le dices a DynamoDB cómo se llama el número en esa tabla, de qué tipo es y qué valor buscas.
+
+```text
+EVENT_ID    → nombre de la clave en la tabla
+N           → tipo número
+"1"         → las cifras del número que buscas
+```
+
+Las tres piezas forman `{"EVENT_ID":{"N":"1"}}`. DynamoDB lee **el número 1** porque la etiqueta es `N`. Si escribieras `{"S":"1"}` para ese mismo atributo, estarías enviando **texto**, y la tabla espera un número. Las comillas simples que rodean todo el JSON permiten que Git Bash o Terminal lo pasen como un solo argumento.
+
+**2 · Lee la ficha recién guardada con `--consistent-read`**
+
+Acabas de cargar «Festival de otoño» con `npm run aula`. Esta opción pide a DynamoDB que tenga en cuenta las escrituras ya confirmadas cuando haga la lectura. Son dos decisiones distintas. `--key` indica **qué ficha** buscas y `--consistent-read` indica **cómo** quieres leerla.
+
+**3 · Muestra solo la ficha con `--query 'Item'`**
+
+DynamoDB entrega la ficha dentro de un campo llamado `Item`. Imagina que `Item` es el sobre y que dentro vienen el ID y el título. `--query 'Item'` abre el sobre en AWS CLI y se queda con su contenido. `--output json` decide cómo se imprime ese contenido.
+
+**Respuesta antes de aplicar `--query 'Item'`**
+
+```json
+{
+  "Item": {
+    "EVENT_ID": { "N": "1" },
+    "TITLE": { "S": "Festival de otoño" }
+  }
+}
+```
+
+#### Qué valor usa cada parte del comando
 
 | Parte del comando | Qué le estás pidiendo | Valor de ejemplo y dónde se define |
 | --- | --- | --- |
 | `aws dynamodb get-item` | «Dame el ítem que corresponde a esta clave primaria». | `get-item` · Lo escribes directamente en el comando de AWS CLI. |
 | `--table-name "FCI_EVENTOS_${FCI_EQUIPO}"` | Abre la tabla de eventos de tu equipo. Si tu código es `equipo01`, el nombre será `FCI_EVENTOS_equipo01`. | `FCI_EVENTOS_equipo01` · Exportas `FCI_EQUIPO=equipo01` en el [paso 4](#4-configura-y-comprueba-tu-despliegue). Ese código se usa como etapa en [serverless.yml](serverless.yml), donde `TableName: FCI_EVENTOS_${sls:stage}` define el nombre que recibe la tabla al desplegar. |
 | `--profile "$AWS_PROFILE" --region "$AWS_REGION"` | Usa la sesión del laboratorio y busca la tabla en la región del despliegue. | **Perfil `academy`** · Lo eliges con `AWS_PROFILE` en el [paso 4](#4-configura-y-comprueba-tu-despliegue). Sus credenciales están bajo `[academy]` en `~/.aws/credentials` ([paso 3](#3-activa-aws-academy-y-guarda-las-credenciales)).<br>**Región `us-east-1`** · La asignas a `AWS_REGION` en el paso 4. `provider.region` usa esa misma variable en [serverless.yml](serverless.yml). |
-| `--key '{"EVENT_ID":{"N":"1"}}'` | Busca la clave `EVENT_ID` con valor numérico `1`. En el formato de AWS CLI, `N` significa número y sus cifras se escriben entre comillas. | `EVENT_ID = 1` · [serverless.yml](serverless.yml) define `EVENT_ID` como clave de tipo `N`. El `1` lo escribes en la consulta y coincide con `eventId: 1` de [scripts/aula.mjs](scripts/aula.mjs), que carga el evento «Festival de otoño» al ejecutar `npm run aula`. |
-| `--consistent-read` | Pide una lectura fuerte para que se refleje la escritura que acaba de confirmar DynamoDB. | `ConsistentRead = true` · Se activa al escribir `--consistent-read` en el comando. |
-| `--query 'Item' --output json` | AWS CLI toma el campo `Item` de la respuesta y lo muestra en JSON. La búsqueda por clave ya se hizo con `--key`. | **`Item`** · Es el campo que devuelve DynamoDB con el evento encontrado. **`json`** · Lo eliges en el comando para ver ese campo en formato JSON. |
+| `--key '{"EVENT_ID":{"N":"1"}}'` | Busca la ficha del evento **1** por su clave. | `EVENT_ID = 1` · [serverless.yml](serverless.yml) define `EVENT_ID` como clave de tipo `N`. El `1` lo escribes en la consulta y coincide con `eventId: 1` de [scripts/aula.mjs](scripts/aula.mjs), que carga el evento «Festival de otoño» al ejecutar `npm run aula`. |
+| `--consistent-read` | Pide que la lectura refleje las escrituras ya confirmadas. | `ConsistentRead = true` · Se activa al escribir `--consistent-read` en el comando. |
+| `--query 'Item' --output json` | Toma el contenido de `Item` y lo imprime en JSON. | **`Item`** · Es el campo que devuelve DynamoDB con el evento encontrado. **`json`** · Lo eliges en el comando para ver ese campo en formato JSON. |
 
 La barra `\` al final de una línea le indica a Bash que el comando continúa en la siguiente. [Referencia de GetItem](https://docs.aws.amazon.com/cli/latest/reference/dynamodb/get-item.html) · [Consistencia de lectura en DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html)
 
-Con el ID de ejemplo, espera un resultado como este:
+**Salida con `--query 'Item' --output json`**
 
 ```json
 {
@@ -239,7 +272,17 @@ Con el ID de ejemplo, espera un resultado como este:
 }
 ```
 
-Aquí `S` significa texto. **Antes de avanzar**, localiza el ID numérico y el título. Si ves `null`, comprueba el equipo, la región y que `npm run aula` haya cargado el evento 1.
+Aquí `S` significa texto. **Antes de avanzar**, compara las dos salidas. Desde la raíz del proyecto, ejecuta este segundo comando, que solo omite `--query 'Item'`.
+
+```bash
+aws dynamodb get-item \
+  --table-name "FCI_EVENTOS_${FCI_EQUIPO}" \
+  --profile "$AWS_PROFILE" --region "$AWS_REGION" \
+  --key '{"EVENT_ID":{"N":"1"}}' \
+  --consistent-read --output json
+```
+
+Comprueba que reaparece el campo `Item` y que dentro siguen el mismo ID y el mismo título. Si ves `null`, comprueba el equipo, la región y que `npm run aula` haya cargado el evento 1.
 
 ### Comprueba el mismo evento en la pantalla
 
