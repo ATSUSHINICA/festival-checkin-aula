@@ -22,11 +22,10 @@ git clone https://github.com/albertohdezakkari/festival-checkin-01.git
 cd festival-checkin-01
 node --version
 aws --version
-npm ci
-npm test
+npm ci && npm ls serverless --depth=0
 ```
 
-La prueba local pasa por los cuatro handlers y genera los comandos reales de DynamoDB Toolbox. El envío a DynamoDB se simula. Comprueba la consulta sin pase, el alta, el conflicto al repetir y la lectura posterior.
+La instalación debe mostrar `serverless@4.45.0`.
 
 ## 2. Configura tu sesión
 

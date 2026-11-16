@@ -46,13 +46,11 @@ pwd
 npm pkg get name
 ```
 
-La ruta debe terminar en `festival-checkin-01` y el nombre del paquete debe ser `"festival-checkin-01"`. Si estás en `festival-checkin` o ves `Error: no test specified`, abre el clon correcto y repite el bloque.
+La ruta debe terminar en `festival-checkin-01` y el nombre del paquete debe ser `"festival-checkin-01"`. Si estás en `festival-checkin`, abre el clon correcto y repite el bloque.
 
 ```bash
-npm ci && npm test && npm ls serverless --depth=0
+npm ci && npm ls serverless --depth=0
 ```
-
-La prueba local recorre los cuatro handlers con DynamoDB simulado y debe mostrar **`pass 1` y `fail 0`**.
 
 `npm ci` instala Serverless Framework en el proyecto. `npm ls` debe mostrar **`serverless@4.45.0`**. En el paso 5 arrancarás la CLI con las variables del laboratorio ya cargadas.
 
