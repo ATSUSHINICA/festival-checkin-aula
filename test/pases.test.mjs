@@ -9,8 +9,8 @@ process.env.FCI_TABLA_INSCRIPCIONES = 'INSCRIPCIONES';
 const { db } = await import('../src/datos/dynamo.mjs');
 const { handler: crearEvento } = await import('../src/eventos/crear-evento/handler.mjs');
 const { handler: crearUsuario } = await import('../src/usuarios/crear-usuario/handler.mjs');
-const { handler: consultar } = await import('../src/pases/consultar-pase/handler.mjs');
-const { handler: inscribir } = await import('../src/pases/inscribir-usuario/handler.mjs');
+const { handler: consultar } = await import('../src/inscripciones/consultar-pase/handler.mjs');
+const { handler: inscribir } = await import('../src/inscripciones/inscribir-usuario/handler.mjs');
 
 test('Alta, consulta e inscripción a través de los cuatro handlers', async context => {
   const datos = new Map();

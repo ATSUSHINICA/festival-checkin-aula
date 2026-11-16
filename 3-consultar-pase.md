@@ -12,10 +12,10 @@ En [serverless.yml](serverless.yml), `functions → consultarPase → events →
 
 | Abre en este orden | Qué ocurre |
 | --- | --- |
-| [Handler](src/pases/consultar-pase/handler.mjs) y [peticion.mjs](src/pases/peticion.mjs) | El handler delega en `handleRequest`. Este extrae los dos parámetros de la ruta, comprueba su formato y llama a `consultarPase`. |
-| [Service](src/pases/consultar-pase/service.mjs) | Busca primero el evento. Si falta, devuelve 404. Si existe, busca la inscripción y devuelve 200 con el título y el resultado de esa búsqueda. |
-| [Repositorio del evento](src/eventos/persistencia/eventos.repository.mjs) | Lee el evento con `GetItemCommand` usando solo `EVENT_ID`. |
-| [Repositorio del pase](src/pases/consultar-pase/repository.mjs) y [modelo Inscripcion](src/pases/inscripcion.model.mjs) | Usan Toolbox para leer el pase por la pareja `EVENT_ID` y `USER_ID`. Si el ítem aún no existe, el repositorio devuelve `null`. |
+| [Handler](src/inscripciones/consultar-pase/handler.mjs) y [peticion.mjs](src/inscripciones/peticion.mjs) | El handler delega en `handleRequest`. Este extrae los dos parámetros de la ruta, comprueba su formato y llama a `consultarPaseService`. |
+| [Service](src/inscripciones/consultar-pase/service.mjs) | Busca primero el evento. Si falta, devuelve 404. Si existe, busca la inscripción y devuelve 200 con el título y el resultado de esa búsqueda. |
+| [Service de búsqueda](src/eventos/buscar-evento/service.mjs) y [Repository de búsqueda](src/eventos/buscar-evento/repository.mjs) | `buscarEventoService` delega en `buscarEventoRepository`, que lee el evento con `GetItemCommand` usando solo `EVENT_ID`. |
+| [Repositorio del pase](src/inscripciones/consultar-pase/repository.mjs) y [modelo Inscripcion](src/inscripciones/inscripcion.model.mjs) | `consultarPaseRepository` usa Toolbox para leer el pase por la pareja `EVENT_ID` y `USER_ID`. Si el ítem aún no existe, el repositorio devuelve `null`. |
 
 Predice qué verá un visitante si existe el evento pero aún no está inscrito. [Consulta por capas y ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm)
 

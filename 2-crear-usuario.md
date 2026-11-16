@@ -10,9 +10,11 @@
 
 En [serverless.yml](serverless.yml), `functions → crearUsuario` apunta a `src/usuarios/crear-usuario/handler.handler`. La invocas directamente con AWS CLI.
 
-En este caso, el [handler de usuario](src/usuarios/crear-usuario/handler.mjs) reúne la validación y el acceso a datos. Comprueba el código, el nombre, los apellidos y el correo. Construye el ítem con `USER_ID`, `FIRST_NAME`, `LAST_NAME`, `EMAIL` y `CITY`. Después escribe con `PutCommand` del SDK y protege `USER_ID` con una condición de escritura.
-
-Localiza las dos responsabilidades dentro del archivo. Para explicar qué llevarías a un service y qué llevarías a un repository, usa como referencia el alta de evento del caso 1.
+| Abre en este orden | Qué ocurre |
+| --- | --- |
+| [Handler](src/usuarios/crear-usuario/handler.mjs) | Recibe el perfil de Lambda y llama a `crearUsuarioService`. |
+| [Service](src/usuarios/crear-usuario/service.mjs) | Comprueba el código, el nombre, los apellidos y el correo. Limpia los espacios y llama a `crearUsuarioRepository`. |
+| [Repository](src/usuarios/crear-usuario/repository.mjs) | Traduce los campos a `USER_ID`, `FIRST_NAME`, `LAST_NAME`, `EMAIL` y `CITY`. Usa `PutCommand` del SDK y protege `USER_ID` con una condición de escritura. |
 
 ## Crea el perfil
 

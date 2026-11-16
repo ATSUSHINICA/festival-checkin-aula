@@ -44,13 +44,13 @@ functions:
     name: ${self:service}-${self:provider.stage}-crearUsuario
     handler: src/usuarios/crear-usuario/handler.handler
   consultarPase:
-    handler: src/pases/consultar-pase/handler.handler
+    handler: src/inscripciones/consultar-pase/handler.handler
     events:
       - httpApi:
           method: GET
           path: /events/{eventId}/registrations/{userId}
   inscribirUsuario:
-    handler: src/pases/inscribir-usuario/handler.handler
+    handler: src/inscripciones/inscribir-usuario/handler.handler
     events:
       - httpApi:
           method: POST
