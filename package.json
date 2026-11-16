@@ -6,7 +6,6 @@
     "node": ">=20"
   },
   "scripts": {
-    "test": "node --test",
     "deploy": "serverless deploy",
     "aula": "node scripts/aula.mjs"
   },

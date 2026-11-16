@@ -32,7 +32,6 @@ build:
 package:
   patterns:
     - "!scripts/**"
-    - "!test/**"
     - "!README.md"
     - "!.env*"
 
