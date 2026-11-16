@@ -4,6 +4,8 @@
 
 **Punto de partida.** Completa [0-conf.md](0-conf.md). Trabaja desde la raíz de `festival-checkin-01`, con el despliegue hecho y las variables `AWS_PROFILE`, `AWS_REGION` y `FCI_EQUIPO` cargadas en esa terminal.
 
+[Abre la infografía interactiva y sigue la traza en paralelo](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/traza-evento/).
+
 ## Sigue el código
 
 Abre [serverless.yml](serverless.yml) y busca `functions → crearEvento`.
