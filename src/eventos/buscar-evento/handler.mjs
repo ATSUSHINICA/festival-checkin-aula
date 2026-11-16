@@ -1,8 +1,8 @@
 import { buscarEventoService } from './service.mjs';
 
 /**
- * AWS Lambda entrega el JSON enviado en --data como un objeto JavaScript.
- * @param {{ eventId: number }} event ID numérico enviado en el JSON.
+ * Lambda entrega el JSON de --data como objeto. El ejemplo usa el evento de npm run aula.
+ * @param {{ eventId: number }} event ID entero positivo del evento que quieres leer.
  * @example
  * npx --no-install serverless invoke \
  *   --function buscarEvento \
