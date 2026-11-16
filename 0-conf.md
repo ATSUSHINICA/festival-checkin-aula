@@ -217,14 +217,14 @@ aws dynamodb get-item \
 
 Lee el comando en el mismo orden en que lo escribes:
 
-| Parte del comando | Qué le estás pidiendo |
-| --- | --- |
-| `aws dynamodb get-item` | «Dame el ítem que corresponde a esta clave primaria». |
-| `--table-name "FCI_EVENTOS_${FCI_EQUIPO}"` | Abre la tabla de eventos de tu equipo. Si tu código es `equipo01`, el nombre será `FCI_EVENTOS_equipo01`. |
-| `--profile "$AWS_PROFILE" --region "$AWS_REGION"` | Usa la sesión del laboratorio y busca la tabla en la región del despliegue. |
-| `--key '{"EVENT_ID":{"N":"1"}}'` | Busca la clave `EVENT_ID` con valor numérico `1`. En el formato de AWS CLI, `N` significa número y sus cifras se escriben entre comillas. |
-| `--consistent-read` | Pide una lectura fuerte para que se refleje la escritura que acaba de confirmar DynamoDB. |
-| `--query 'Item' --output json` | AWS CLI toma el campo `Item` de la respuesta y lo muestra en JSON. La búsqueda por clave ya se hizo con `--key`. |
+| Parte del comando | Qué le estás pidiendo | Valor de ejemplo y dónde se define |
+| --- | --- | --- |
+| `aws dynamodb get-item` | «Dame el ítem que corresponde a esta clave primaria». | `get-item` · Lo escribes directamente en el comando de AWS CLI. |
+| `--table-name "FCI_EVENTOS_${FCI_EQUIPO}"` | Abre la tabla de eventos de tu equipo. Si tu código es `equipo01`, el nombre será `FCI_EVENTOS_equipo01`. | `FCI_EVENTOS_equipo01` · Exportas `FCI_EQUIPO=equipo01` en el [paso 4](#4-configura-y-comprueba-tu-despliegue). Ese código se usa como etapa en [serverless.yml](serverless.yml), donde `TableName: FCI_EVENTOS_${sls:stage}` define el nombre que recibe la tabla al desplegar. |
+| `--profile "$AWS_PROFILE" --region "$AWS_REGION"` | Usa la sesión del laboratorio y busca la tabla en la región del despliegue. | **Perfil `academy`** · Lo eliges con `AWS_PROFILE` en el [paso 4](#4-configura-y-comprueba-tu-despliegue). Sus credenciales están bajo `[academy]` en `~/.aws/credentials` ([paso 3](#3-activa-aws-academy-y-guarda-las-credenciales)).<br>**Región `us-east-1`** · La asignas a `AWS_REGION` en el paso 4. `provider.region` usa esa misma variable en [serverless.yml](serverless.yml). |
+| `--key '{"EVENT_ID":{"N":"1"}}'` | Busca la clave `EVENT_ID` con valor numérico `1`. En el formato de AWS CLI, `N` significa número y sus cifras se escriben entre comillas. | `EVENT_ID = 1` · [serverless.yml](serverless.yml) define `EVENT_ID` como clave de tipo `N`. El `1` lo escribes en la consulta y coincide con `eventId: 1` de [scripts/aula.mjs](scripts/aula.mjs), que carga el evento «Festival de otoño» al ejecutar `npm run aula`. |
+| `--consistent-read` | Pide una lectura fuerte para que se refleje la escritura que acaba de confirmar DynamoDB. | `ConsistentRead = true` · Se activa al escribir `--consistent-read` en el comando. |
+| `--query 'Item' --output json` | AWS CLI toma el campo `Item` de la respuesta y lo muestra en JSON. La búsqueda por clave ya se hizo con `--key`. | **`Item`** · Es el campo que devuelve DynamoDB con el evento encontrado. **`json`** · Lo eliges en el comando para ver ese campo en formato JSON. |
 
 La barra `\` al final de una línea le indica a Bash que el comando continúa en la siguiente. [Referencia de GetItem](https://docs.aws.amazon.com/cli/latest/reference/dynamodb/get-item.html) · [Consistencia de lectura en DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html)
 
