@@ -22,10 +22,11 @@ git clone https://github.com/albertohdezakkari/festival-checkin-01.git
 cd festival-checkin-01
 node --version
 aws --version
-npm ci && npm ls serverless --depth=0
+npm ci
+npm ls serverless --depth=0
 ```
 
-`npm ci` instala las versiones fijadas en `package-lock.json`. El segundo comando lista Serverless como dependencia directa y debe mostrar `serverless@4.45.0`. [Cuándo usar cada comando](0-conf.md#2-clona-e-instala-el-proyecto)
+`npm ci` instala las versiones fijadas en `package-lock.json`. Cuando termine la instalación, el segundo comando lista Serverless como dependencia directa y debe mostrar `serverless@4.45.0`. [Cuándo usar cada comando](0-conf.md#2-clona-e-instala-el-proyecto)
 
 ## 2. Configura tu sesión
 
@@ -44,7 +45,13 @@ Si guardaste las credenciales en `[default]`, exporta `AWS_PROFILE=default`. Si 
 
 ```bash
 LAMBDA_ROLE_ARN=$(aws iam get-role --role-name LabRole \
-  --profile "$AWS_PROFILE" --region "$AWS_REGION" --query 'Role.Arn' --output text) &&
+  --profile "$AWS_PROFILE" --region "$AWS_REGION" --query 'Role.Arn' --output text)
+printf '%s\n' "$LAMBDA_ROLE_ARN"
+```
+
+Si aparece el ARN de `LabRole`, expórtalo:
+
+```bash
 export LAMBDA_ROLE_ARN
 ```
 
@@ -55,7 +62,12 @@ Si el laboratorio deniega `iam:GetRole`, exporta `LAMBDA_ROLE_ARN` con el ARN co
 En la misma terminal, desde la raíz del repositorio. Si abriste otra, recupera las cuatro variables del [paso 4 de 0-conf.md](0-conf.md#4-configura-y-comprueba-tu-despliegue).
 
 ```bash
-npm run deploy -- --aws-profile "$AWS_PROFILE" &&
+npm run deploy -- --aws-profile "$AWS_PROFILE"
+```
+
+Cuando Serverless confirme el despliegue, ejecuta:
+
+```bash
 npm run aula
 ```
 

@@ -28,14 +28,14 @@ Serverless Framework se instala con las dependencias del proyecto en el paso 2. 
 Desde la carpeta donde guardas tus prácticas, ejecuta:
 
 ```bash
-git clone https://github.com/albertohdezakkari/festival-checkin-01.git &&
+git clone https://github.com/albertohdezakkari/festival-checkin-01.git
 cd festival-checkin-01
 ```
 
 Si ya lo clonaste, entra en la carpeta existente y actualízala:
 
 ```bash
-cd festival-checkin-01 &&
+cd festival-checkin-01
 git pull --ff-only
 ```
 
@@ -49,12 +49,18 @@ npm pkg get name
 La ruta debe terminar en `festival-checkin-01` y el nombre del paquete debe ser `"festival-checkin-01"`. Si estás en `festival-checkin`, abre el clon correcto y repite el bloque.
 
 ```bash
-npm ci && npm ls serverless --depth=0
+npm ci
+```
+
+Cuando termine la instalación, comprueba la versión instalada:
+
+```bash
+npm ls serverless --depth=0
 ```
 
 Aquí clonas un proyecto que ya trae `package-lock.json`. Usa **`npm ci`** para reconstruir `node_modules` con las versiones fijadas en ese archivo. npm detiene la instalación si el archivo de bloqueo y `package.json` están desincronizados.
 
-**`npm ls serverless --depth=0`** muestra la versión de Serverless instalada en esta carpeta. `ls` significa «listar» y `--depth=0` limita la salida a las dependencias directas del proyecto. Debes ver **`serverless@4.45.0`**. El `&&` hace que la comprobación se ejecute solo si la instalación terminó bien.
+**`npm ls serverless --depth=0`** muestra la versión de Serverless instalada en esta carpeta. `ls` significa «listar» y `--depth=0` limita la salida a las dependencias directas del proyecto. Debes ver **`serverless@4.45.0`**.
 
 Cuando estás creando un proyecto y quieres **añadir o cambiar** una dependencia, usas `npm install`. Por ejemplo, `npm install --save-dev --save-exact serverless@4.45.0` añade Serverless como herramienta de desarrollo y actualiza `package.json` y `package-lock.json`. En este clon esos cambios ya están guardados.
 
@@ -67,9 +73,9 @@ Entra en **AWS Academy** desde la invitación del centro o el enlace del curso. 
 Dentro de **Learner Lab**, pulsa **Start Lab**. Cuando el laboratorio esté activo, abre **AWS Details → AWS CLI → Show** y copia el bloque de la sesión.
 
 ```bash
-mkdir -p ~/.aws &&
-touch ~/.aws/credentials &&
-chmod 600 ~/.aws/credentials &&
+mkdir -p ~/.aws
+touch ~/.aws/credentials
+chmod 600 ~/.aws/credentials
 vi ~/.aws/credentials
 ```
 
@@ -100,12 +106,17 @@ Avanza cuando la salida muestre `Account` y `Arn`. Si aparece `ExpiredToken`, re
 ```bash
 LAMBDA_ROLE_ARN="$(aws iam get-role --role-name LabRole \
   --profile "$AWS_PROFILE" --region "$AWS_REGION" \
-  --query 'Role.Arn' --output text)" &&
-export LAMBDA_ROLE_ARN &&
+  --query 'Role.Arn' --output text)"
 printf 'Rol de Lambda: %s\n' "$LAMBDA_ROLE_ARN"
 ```
 
-Debe aparecer un ARN que termine en `:role/LabRole`. Si tu cuenta deniega `iam:GetRole`, pide el ARN completo del rol al profesor y sustitúyelo en este comando:
+Si aparece un ARN que termina en `:role/LabRole`, expórtalo:
+
+```bash
+export LAMBDA_ROLE_ARN
+```
+
+Si tu cuenta deniega `iam:GetRole`, pide el ARN completo del rol al profesor y sustitúyelo en este comando:
 
 ```bash
 export LAMBDA_ROLE_ARN="ARN_COMPLETO_DEL_ROL"
@@ -135,19 +146,34 @@ Debe mostrar la versión del Framework. Si aparece un error al resolver una vari
 
 ### Despliega tu entorno y carga los datos
 
-Desde la raíz de `festival-checkin-01`, en la misma terminal del paso 4. Si abriste otra, vuelve a ejecutar el paso 4 para recuperar las cuatro variables. El bloque comprueba que tengan valor y que la sesión de AWS siga activa antes de arrancar Serverless. Si ves `--aws-profile` vacío o un error en `env:FCI_EQUIPO`, recupera las cuatro variables en el paso 4.
+Desde la raíz de `festival-checkin-01`, en la misma terminal del paso 4, comprueba los valores:
 
 ```bash
-: "${AWS_PROFILE:?Vuelve al paso 4 y exporta AWS_PROFILE}" &&
-: "${AWS_REGION:?Vuelve al paso 4 y exporta AWS_REGION}" &&
-: "${FCI_EQUIPO:?Vuelve al paso 4 y exporta FCI_EQUIPO}" &&
-: "${LAMBDA_ROLE_ARN:?Vuelve al paso 4 y exporta LAMBDA_ROLE_ARN}" &&
-aws sts get-caller-identity --profile "$AWS_PROFILE" --region "$AWS_REGION" &&
-npm run deploy -- --aws-profile "$AWS_PROFILE" &&
+printf 'Perfil: %s\nRegión: %s\nEquipo: %s\nRol: %s\n' \
+  "$AWS_PROFILE" "$AWS_REGION" "$FCI_EQUIPO" "$LAMBDA_ROLE_ARN"
+```
+
+Las cuatro líneas deben tener valor. Si alguna está vacía, vuelve al paso 4 para recuperarla. Después comprueba que la sesión sigue activa:
+
+```bash
+aws sts get-caller-identity --profile "$AWS_PROFILE" --region "$AWS_REGION"
+```
+
+Cuando aparezcan `Account` y `Arn`, despliega:
+
+```bash
+npm run deploy -- --aws-profile "$AWS_PROFILE"
+```
+
+Comprueba que el comando muestra `serverless deploy --aws-profile academy` o el perfil que hayas elegido. Serverless debe confirmar el despliegue del stack con tu código de equipo. Si AWS responde `ExpiredToken`, renueva las credenciales como indica el paso 4 y comprueba de nuevo la sesión.
+
+Cuando Serverless confirme el despliegue, carga los datos de ejemplo y prueba el pase:
+
+```bash
 npm run aula
 ```
 
-Comprueba que la línea del comando muestra `serverless deploy --aws-profile academy` o el perfil que hayas elegido. Serverless debe confirmar el despliegue de `festival-check-in-equipo01`, con tu código al final. Si AWS responde `ExpiredToken`, renueva los tres valores del perfil como indica el paso 4 y repite el bloque. Si el despliegue terminó y falló solo la carga de datos, ejecuta `npm run aula` de nuevo después de corregir el error.
+Si falla solo la carga o la prueba, corrige el error y vuelve a ejecutar este último comando.
 
 `npm run aula` carga el evento **1** y el perfil ficticio **`usuario-02`**. En un entorno nuevo debe mostrar **GET 200 → POST 201 → POST 409 → GET 200**. El 409 confirma que se bloqueó la segunda inscripción. Al repetir una prueba ya completada, el pase existente se conserva. Guarda la URL de la API que aparece al final.
 
