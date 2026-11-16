@@ -167,7 +167,16 @@ printf 'Perfil: %s\nRegión: %s\nEquipo: %s\nRol: %s\n' \
   "$AWS_PROFILE" "$AWS_REGION" "$FCI_EQUIPO" "$LAMBDA_ROLE_ARN"
 ```
 
-Las cuatro líneas deben tener valor. Si alguna está vacía, vuelve al paso 4 para recuperarla. Después comprueba que la sesión sigue activa:
+`printf` es **una comprobación opcional**. Muestra los valores de esta terminal antes de desplegar. Cada `%s` se sustituye, en orden, por una de las cuatro variables y cada `\n` pasa a una nueva línea.
+
+| Línea de salida | Qué debes ver |
+| --- | --- |
+| Perfil | El nombre del perfil que guardaste, por ejemplo `academy`. |
+| Región | La región en la que vas a desplegar, por ejemplo `us-east-1`. |
+| Equipo | Tu código de equipo. Serverless lo usa para nombrar el entorno y sus tablas. |
+| Rol | El ARN completo de `LabRole` que asignarás a Lambda. |
+
+Si alguna línea está vacía, vuelve al paso 4. Esto ayuda a detectar errores como `--aws-profile` vacío o `FCI_EQUIPO` sin valor. **Puedes omitir `printf` si ya tienes los cuatro valores configurados.** La comprobación de la sesión se hace con el comando siguiente, que sí consulta AWS.
 
 ```bash
 aws sts get-caller-identity --profile "$AWS_PROFILE" --region "$AWS_REGION"
