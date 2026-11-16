@@ -60,6 +60,16 @@ aws lambda invoke \
 cat respuesta-buscar-evento.json
 ```
 
+Sigue el dato con `3` como ID de ejemplo.
+
+| Paso | Qué recibe y qué entrega |
+| --- | --- |
+| **AWS CLI → Handler** | `--function-name` elige la Lambda. Bash pone el valor de `evento_id` en `--payload`. AWS entrega `{"eventId": 3}` como objeto JavaScript al parámetro `event`. |
+| **Handler → Service** | `const { eventId } = event ?? {};` extrae la propiedad. Es como leer `event.eventId` cuando existe el objeto. Si falta el objeto, `?? {}` permite que la comprobación detecte el ID ausente. El handler comprueba que llega un entero positivo seguro y llama a `buscarEventoService(3)`. |
+| **Service → Repository** | `buscarEventoRepository(3)` recibe un número. En `.key({ eventId })`, las llaves crean el objeto `{ eventId: 3 }` que espera Toolbox. |
+| **Repository → DynamoDB** | `MODELO_EVENTO` traduce `eventId` a `EVENT_ID`. `.send()` envía un `GetItem` a la tabla de eventos de tu equipo con la clave numérica `EVENT_ID = 3`. Esa única clave identifica el ítem del evento. |
+| **DynamoDB → Terminal** | DynamoDB devuelve el ítem con `EVENT_ID` y `TITLE`. Toolbox lo devuelve al repository como `Item: { eventId: 3, title: "Concierto de aula" }`. Service y handler devuelven el resultado, y AWS CLI lo escribe en `respuesta-buscar-evento.json`. |
+
 **Antes de avanzar.** Comprueba que la respuesta contiene tu `eventId` y el título «Concierto de aula». Si pruebas con un ID válido que no existe, la salida es `null`.
 
 ## Comprueba el ítem
