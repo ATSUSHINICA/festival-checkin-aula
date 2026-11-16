@@ -1,4 +1,4 @@
-import { handleRequest } from '../peticion.mjs';
+import { handleRequest } from '../http/peticion.mjs';
 import { consultarPaseService } from './service.mjs';
 
 export function handler(event) {

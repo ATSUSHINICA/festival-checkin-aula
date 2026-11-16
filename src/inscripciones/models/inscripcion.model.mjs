@@ -3,7 +3,7 @@ import { Table } from 'dynamodb-toolbox/table';
 import { item } from 'dynamodb-toolbox/schema/item';
 import { number } from 'dynamodb-toolbox/schema/number';
 import { string } from 'dynamodb-toolbox/schema/string';
-import { db, TABLA_INSCRIPCIONES_FCI } from '../datos/dynamo.mjs';
+import { db, TABLA_INSCRIPCIONES_FCI } from '../../datos/dynamo.mjs';
 
 const tablaInscripciones = new Table({
   name: TABLA_INSCRIPCIONES_FCI,

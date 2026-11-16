@@ -1,4 +1,4 @@
-import { json } from '../peticion.mjs';
+import { json } from '../http/peticion.mjs';
 import { buscarEventoService } from '../../eventos/buscar-evento/service.mjs';
 import { buscarUsuarioRepository, inscribirUsuarioRepository } from './repository.mjs';
 

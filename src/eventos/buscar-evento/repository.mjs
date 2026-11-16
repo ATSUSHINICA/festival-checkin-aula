@@ -1,5 +1,5 @@
 import { GetItemCommand } from 'dynamodb-toolbox/entity/actions/get';
-import { MODELO_EVENTO } from '../persistencia/evento.model.mjs';
+import { MODELO_EVENTO } from '../models/evento.model.mjs';
 
 export async function buscarEventoRepository(eventId) {
   const { Item } = await MODELO_EVENTO.build(GetItemCommand)

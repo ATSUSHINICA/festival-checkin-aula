@@ -15,7 +15,7 @@ En [serverless.yml](serverless.yml), `functions → inscribirUsuario → events 
 | [Handler](src/inscripciones/inscribir-usuario/handler.mjs) | Usa `handleRequest` para leer la ruta y llama a `inscribirUsuarioService`. |
 | [Service](src/inscripciones/inscribir-usuario/service.mjs) | Comprueba el evento con [buscarEventoService](src/eventos/buscar-evento/service.mjs) y el usuario con `buscarUsuarioRepository`. Obtiene la fecha de inscripción en UTC y llama a `inscribirUsuarioRepository`. |
 | [Repository](src/inscripciones/inscribir-usuario/repository.mjs) | `buscarUsuarioRepository` lee el usuario con el SDK. Guarda la inscripción con Toolbox y una condición que impide sustituir un pase existente. |
-| [Modelo Inscripcion](src/inscripciones/inscripcion.model.mjs) y [peticion.mjs](src/inscripciones/peticion.mjs) | El modelo traduce los nombres a DynamoDB. Si DynamoDB rechaza una escritura duplicada, `handleRequest` la convierte en HTTP 409. |
+| [Modelo Inscripcion](src/inscripciones/models/inscripcion.model.mjs) y [peticion.mjs](src/inscripciones/http/peticion.mjs) | El modelo traduce los nombres a DynamoDB. Si DynamoDB rechaza una escritura duplicada, `handleRequest` la convierte en HTTP 409. |
 
 Predice qué pasará con la fecha de inscripción cuando envíes dos POST para la misma pareja. [Inscripción por capas y ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm)
 

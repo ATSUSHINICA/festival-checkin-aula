@@ -80,7 +80,7 @@ Abre la [pantalla del festival](https://albertohdezakkari.github.io/04-PILARES-S
 
 ## 4. Sigue el código desde la petición hasta DynamoDB
 
-En `src/eventos/crear-evento/` están los archivos del alta. En `src/eventos/buscar-evento/` están el service y el repository de lectura que reutilizan **Consultar pase** e **Inscribir usuario**. El modelo que comparten el alta y la lectura vive en `src/eventos/persistencia/`. En `src/inscripciones/` están los casos **Consultar pase** e **Inscribir usuario**, que trabajan con `FCI_INSCRIPCIONES`.
+En `src/eventos/crear-evento/` están los archivos del alta. En `src/eventos/buscar-evento/` están el service y el repository de lectura que reutilizan **Consultar pase** e **Inscribir usuario**. El modelo que comparten el alta y la lectura vive en `src/eventos/models/`. En `src/inscripciones/` están los casos **Consultar pase** e **Inscribir usuario**, que trabajan con `FCI_INSCRIPCIONES`. Sus handlers comparten `http/peticion.mjs` para preparar la llamada al service y responder a API Gateway. Su modelo de DynamoDB Toolbox está en `models/`.
 
 | Abre | Qué buscar |
 | --- | --- |
@@ -88,7 +88,7 @@ En `src/eventos/crear-evento/` están los archivos del alta. En `src/eventos/bus
 | `src/inscripciones/consultar-pase/handler.mjs` | La entrada de API Gateway llama al caso de uso de consulta. |
 | `src/inscripciones/consultar-pase/service.mjs` | Lee el evento y después el pase. Antes de inscribirse, `registration` vale `null`. |
 | `src/inscripciones/inscribir-usuario/service.mjs` y `repository.mjs` | Comprueban las referencias y guardan la inscripción con una condición que protege frente a duplicados. |
-| `src/eventos/persistencia/evento.model.mjs` y `src/inscripciones/inscripcion.model.mjs` | DynamoDB Toolbox traduce `eventId` a `EVENT_ID` y `userId` a `USER_ID` sin cambiar las claves de las tablas. |
+| `src/eventos/models/evento.model.mjs` y `src/inscripciones/models/inscripcion.model.mjs` | DynamoDB Toolbox traduce `eventId` a `EVENT_ID` y `userId` a `USER_ID` sin cambiar las claves de las tablas. |
 | `src/datos/dynamo.mjs` | El cliente del SDK comparte la conexión y lee los nombres de tablas que inyecta Serverless. |
 
 Sigue en el cuaderno los pasos [Crear con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos-orm), [Consultar con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm) e [Inscribir con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm). El alta del perfil y la lectura de usuario conservan el SDK directo, tal como se muestran en el cuaderno.

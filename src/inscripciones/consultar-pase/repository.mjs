@@ -1,5 +1,5 @@
 import { GetItemCommand } from 'dynamodb-toolbox/entity/actions/get';
-import { MODELO_INSCRIPCION } from '../inscripcion.model.mjs';
+import { MODELO_INSCRIPCION } from '../models/inscripcion.model.mjs';
 
 export async function consultarPaseRepository(eventId, userId) {
   const { Item } = await MODELO_INSCRIPCION.build(GetItemCommand)
