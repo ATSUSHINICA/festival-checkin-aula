@@ -1,6 +1,6 @@
 # 1 · Crear un evento
 
-**En el cuaderno web** · [Crear por capas](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos) · [Crear con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos-orm) · [Infografía de la traza](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/traza-evento/)
+**En el cuaderno web** · [Crear por capas](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos) · [Crear con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos-orm) · [Infografía de la traza](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/traza-evento/#infografia)
 
 **Objetivo.** Invoca una Lambda desde la terminal y sigue el título hasta el ítem que se guarda en DynamoDB.
 
@@ -23,7 +23,7 @@ crearEvento:
 | [Handler](src/eventos/crear-evento/handler.mjs) | Recibe `eventId` y `title` y llama a `crearEventoService(eventId, title)`. |
 | [Service](src/eventos/crear-evento/service.mjs) | Comprueba que el ID sea un entero positivo y que el título tenga texto. Llama a `crearEventoRepository`. |
 | [Repository](src/eventos/crear-evento/repository.mjs) | Usa `PutItemCommand` de DynamoDB Toolbox. La condición de escritura protege el ID de un evento existente. |
-| [Modelo Evento](src/eventos/models/evento.model.mjs) | Transforma `eventId` y `title` en `EVENT_ID` y `TITLE`. DynamoDB usa `EVENT_ID` como clave de partición numérica. |
+| [Modelo Evento](src/eventos/models/evento.model.mjs) · [Explicación visual](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/traza-evento/?paso=modelo#lector) | Transforma `eventId` y `title` en `EVENT_ID` y `TITLE`. DynamoDB usa `EVENT_ID` como clave de partición numérica. |
 
 Antes de ejecutar, señala en qué archivo se comprueba el título y en cuál se decide el nombre de cada atributo guardado. [Diagrama de capas y ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos-orm)
 
