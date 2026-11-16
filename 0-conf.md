@@ -221,15 +221,16 @@ aws dynamodb get-item \
 
 **1 · Identifica la ficha con `--key`**
 
-Imagina una ficha que lleva el número **1**. Para encontrarla, le dices a DynamoDB cómo se llama el número en esa tabla, de qué tipo es y qué valor buscas.
+Para pedir la ficha del evento **1**, escribe la clave en el formato que AWS CLI espera en `--key`.
 
-```text
-EVENT_ID    → nombre de la clave en la tabla
-N           → tipo número
-"1"         → las cifras del número que buscas
-```
+| Qué ves | Cómo lo lees |
+| --- | --- |
+| `{"EVENT_ID": ...}` | Las llaves exteriores agrupan los atributos de la clave. Aquí solo hay uno, `EVENT_ID`. |
+| `{"N":"1"}` | Las llaves interiores agrupan **el tipo y el valor** de ese atributo. AWS abrevia **Number** como `N` y **String** como `S`. |
+| `"1"` | Son las cifras que se envían. AWS transmite los números como cadenas en este formato para que distintos lenguajes y bibliotecas puedan intercambiarlos. DynamoDB lee `N` y trata el valor como el número **1**. |
+| `'{"EVENT_ID":{"N":"1"}}'` | Las comillas simples exteriores son de Bash. Hacen que el JSON completo llegue como un argumento de `--key`. |
 
-Las tres piezas forman `{"EVENT_ID":{"N":"1"}}`. DynamoDB lee **el número 1** porque la etiqueta es `N`. Si escribieras `{"S":"1"}` para ese mismo atributo, estarías enviando **texto**, y la tabla espera un número. Las comillas simples que rodean todo el JSON permiten que Git Bash o Terminal lo pasen como un solo argumento.
+**Prueba a leerlo en voz alta.** `{"N":"1"}` significa «el número uno». `{"S":"1"}` significa «el texto uno». En esta tabla, `EVENT_ID` es numérico, así que usas `N`. [Tipos de atributos en AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/dynamodb/get-item.html)
 
 **2 · Lee la ficha recién guardada con `--consistent-read`**
 
@@ -283,6 +284,40 @@ aws dynamodb get-item \
 ```
 
 Comprueba que reaparece el campo `Item` y que dentro siguen el mismo ID y el mismo título. Si ves `null`, comprueba el equipo, la región y que `npm run aula` haya cargado el evento 1.
+
+### Consulta el mismo evento con PartiQL
+
+**PartiQL** es el lenguaje con sintaxis parecida a SQL que usamos para consultar DynamoDB. Aquí puedes escribir **`1` directamente**. En el `WHERE`, `1` sin comillas es un número y `'1'` entre comillas simples es texto.
+
+| Cómo pides el evento 1 | Cómo se indica el tipo |
+| --- | --- |
+| `--key '{"EVENT_ID":{"N":"1"}}'` | La etiqueta `N` indica que el valor es numérico. |
+| `WHERE EVENT_ID = 1` | PartiQL reconoce el número porque lo escribes sin comillas. |
+
+Desde la raíz del proyecto, en la misma terminal del paso 4, ejecuta:
+
+```bash
+aws dynamodb execute-statement \
+  --statement "SELECT * FROM \"FCI_EVENTOS_${FCI_EQUIPO}\" WHERE EVENT_ID = 1" \
+  --profile "$AWS_PROFILE" --region "$AWS_REGION" \
+  --consistent-read --output json
+```
+
+- **`--statement`** entrega la consulta completa a DynamoDB. Las comillas exteriores permiten que Bash sustituya `FCI_EQUIPO`. Cada `\"` hace que las comillas del nombre de la tabla lleguen a PartiQL.
+- **`SELECT *`** pide todos los atributos del ítem. **`FROM`** indica la tabla de tu equipo. **`WHERE EVENT_ID = 1`** busca por la clave de partición.
+
+```json
+{
+  "Items": [
+    {
+      "EVENT_ID": { "N": "1" },
+      "TITLE": { "S": "Festival de otoño" }
+    }
+  ]
+}
+```
+
+**Antes de avanzar**, busca `EVENT_ID` y `TITLE` en la lista `Items`. Debes ver el mismo evento **1**, «Festival de otoño». En la consulta escribiste `1` directamente. En la respuesta, DynamoDB vuelve a usar sus etiquetas `N` y `S` para indicar el tipo de cada atributo. [SELECT en PartiQL](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ql-reference.select.html) · [execute-statement en AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/dynamodb/execute-statement.html) · [Ejemplos en el cuaderno web](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#comprobar-datos)
 
 ### Comprueba el mismo evento en la pantalla
 
