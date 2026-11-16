@@ -6,7 +6,7 @@ Proyecto de aula listo para clonar. Crearás los recursos en AWS Academy, cargar
 
 ## 1. Clona y comprueba el proyecto
 
-Usa Git Bash en Windows o Terminal en macOS. Necesitas Git, Node.js 20 o superior y AWS CLI v2. Usa la versión compatible que ya tengas instalada. El archivo `.nvmrc` propone Node 22, la versión que ejecuta Lambda en AWS.
+Usa Git Bash en Windows o Terminal en macOS. Necesitas Git, Node.js 20 o superior y AWS CLI v2. Usa la versión compatible que ya tengas instalada. Lambda ejecuta Node 22 en AWS.
 
 ```bash
 git clone https://github.com/albertohdezakkari/festival-checkin-01.git
@@ -16,15 +16,6 @@ aws --version
 npm ci
 npm test
 ```
-
-Si tu equipo tiene Node 18 o anterior, puedes ejecutar la práctica con Node 22 sin cambiar tu versión habitual:
-
-```bash
-npx --yes --package=node@22 -- npm ci &&
-npx --yes --package=node@22 -- npm test
-```
-
-En ese caso, antepón también `npx --yes --package=node@22 --` a los comandos de npm del despliegue.
 
 La prueba local pasa por los cuatro handlers y genera los comandos reales de DynamoDB Toolbox. El envío a DynamoDB se simula. Comprueba la consulta sin pase, el alta, el conflicto al repetir y la lectura posterior.
 
