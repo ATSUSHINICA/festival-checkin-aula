@@ -285,23 +285,21 @@ aws dynamodb get-item \
 
 Comprueba que reaparece el campo `Item` y que dentro siguen el mismo ID y el mismo título. Si ves `null`, comprueba el equipo, la región y que `npm run aula` haya cargado el evento 1.
 
+### Compara la consulta de AWS con SQL
+
+La columna SQL usa el nombre de tabla del equipo de ejemplo, `equipo01`. Cada fila muestra la misma lectura a ambos lados.
+
+| Consulta en AWS CLI | SQL equivalente |
+| --- | --- |
+| **Leer el evento 1 con GetItem**<br>`aws dynamodb get-item \`<br>`--table-name "FCI_EVENTOS_${FCI_EQUIPO}" \`<br>`--profile "$AWS_PROFILE" --region "$AWS_REGION" \`<br>`--key '{"EVENT_ID":{"N":"1"}}' \`<br>`--consistent-read --output json` | `SELECT *`<br>`FROM FCI_EVENTOS_equipo01`<br>`WHERE EVENT_ID = 1` |
+| **Leer el evento 1 con PartiQL**<br>`aws dynamodb execute-statement \`<br>`--statement "SELECT * FROM \"FCI_EVENTOS_${FCI_EQUIPO}\" WHERE EVENT_ID = 1" \`<br>`--consistent-read --output json` | `SELECT *`<br>`FROM FCI_EVENTOS_equipo01`<br>`WHERE EVENT_ID = 1` |
+| **Listar todos los eventos con PartiQL**<br>`aws dynamodb execute-statement \`<br>`--statement "SELECT * FROM \"FCI_EVENTOS_${FCI_EQUIPO}\"" \`<br>`--consistent-read --output json` | `SELECT *`<br>`FROM FCI_EVENTOS_equipo01` |
+
 ### Consulta el mismo evento con PartiQL
 
-**Primero, lee la consulta como SQL.** Si tu equipo es `equipo01`, este `SELECT` pide la ficha del evento **1**.
+Lee el SQL de la tabla anterior. `SELECT *` pide todos los atributos, `FROM` indica la tabla y `WHERE EVENT_ID = 1` busca el evento por su clave de partición. El `1` sin comillas es un número.
 
-```sql
-SELECT *
-FROM FCI_EVENTOS_equipo01
-WHERE EVENT_ID = 1
-```
-
-| Línea | Qué le pides |
-| --- | --- |
-| `SELECT *` | Devuelve todos los atributos de cada evento, como `EVENT_ID` y `TITLE`. |
-| `FROM FCI_EVENTOS_equipo01` | Lee la tabla de eventos del equipo `equipo01`. |
-| `WHERE EVENT_ID = 1` | Busca por la clave de partición. El `1` sin comillas es un número. |
-
-**Después, envía ese SELECT a DynamoDB.** DynamoDB entiende esta consulta mediante **PartiQL**, su lenguaje con sintaxis parecida a SQL. Con `get-item --key` escribiste `{"N":"1"}` para indicar el tipo. En PartiQL basta con escribir `EVENT_ID = 1`.
+**Ahora ejecuta el SELECT en DynamoDB.** DynamoDB entiende esta consulta mediante **PartiQL**, su lenguaje con sintaxis parecida a SQL. Con `get-item --key` escribiste `{"N":"1"}` para indicar el tipo. En PartiQL basta con escribir `EVENT_ID = 1`.
 
 Desde la raíz del proyecto, usa la misma terminal del paso 4. AWS CLI toma el perfil y la región de `AWS_PROFILE` y `AWS_REGION`, que ya exportaste.
 
@@ -329,14 +327,7 @@ Comprueba que `Items` contiene el evento **1**, «Festival de otoño». En la re
 
 ### Lista todos los eventos con PartiQL
 
-**Primero, lee el SELECT.** Quita la línea `WHERE` para pedir todos los eventos de la tabla.
-
-```sql
-SELECT *
-FROM FCI_EVENTOS_equipo01
-```
-
-**Después, ejecútalo con AWS CLI.**
+Quita la línea `WHERE` para pedir todos los eventos de la tabla. Ejecuta el comando desde la misma terminal.
 
 ```bash
 aws dynamodb execute-statement \
