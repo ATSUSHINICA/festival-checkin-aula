@@ -4,6 +4,15 @@ Proyecto de aula listo para clonar. Crearás los recursos en AWS Academy, cargar
 
 **Para empezar en clase, sigue [0-conf.md](0-conf.md) de principio a fin.**
 
+## Recorrido por casos de uso
+
+Usa el mismo evento y usuario de principio a fin. En cada caso, abre primero `serverless.yml`, sigue las llamadas y ejecuta la comprobación.
+
+1. [Crear un evento](1-crear-evento.md) · Guardar un evento por capas con DynamoDB Toolbox.
+2. [Crear un usuario](2-crear-usuario.md) · Preparar el perfil que se inscribirá.
+3. [Consultar un pase](3-consultar-pase.md) · Leer el evento y observar el pase antes de inscribir.
+4. [Inscribir a un usuario](4-inscribir-usuario.md) · Crear la relación, comprobar el 409 al repetir y leer la fecha guardada.
+
 ## 1. Clona y comprueba el proyecto
 
 Usa Git Bash en Windows o Terminal en macOS. Necesitas Git, Node.js 20 o superior y AWS CLI v2. Usa la versión compatible que ya tengas instalada. Lambda ejecuta Node 22 en AWS.
