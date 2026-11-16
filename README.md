@@ -2,7 +2,7 @@
 
 Proyecto de aula listo para clonar. Crearás los recursos en AWS Academy, cargarás un evento y un perfil ficticio y comprobarás el pase por HTTP.
 
-**Para empezar en clase, sigue [0-conf.md](0-conf.md) de principio a fin.**
+**Para empezar en clase, sigue [0-conf.md](0-conf.md) de principio a fin.** Si trabajas en el navegador, abre [0-codespaces.md](0-codespaces.md).
 
 ## Recorrido por casos de uso
 
