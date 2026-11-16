@@ -51,26 +51,33 @@ async function ejecutarPrueba(archivo) {
   };
   sembrar(stack, 'crearEvento', evento, archivo);
   const usuarioExistia = sembrar(stack, 'crearUsuario', usuario, archivo);
-  const ruta = url.replace(/\/$/, '') + '/events/1/registrations/usuario-02';
+  const rutaInscripciones = url.replace(/\/$/, '') + '/events/' + evento.eventId + '/registrations';
+  const rutaPase = rutaInscripciones + '/' + encodeURIComponent(usuario.userId);
+  const post = {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ userId: usuario.userId })
+  };
 
-  async function enviar(method) {
-    const response = await fetch(ruta, { method, signal: AbortSignal.timeout(15_000) });
+  async function enviar(ruta, opciones = {}) {
+    const { method = 'GET' } = opciones;
+    const response = await fetch(ruta, { ...opciones, signal: AbortSignal.timeout(15_000) });
     console.log(method + ' → ' + response.status);
     return { status: response.status, datos: await response.json() };
   }
 
-  const inicial = await enviar('GET');
+  const inicial = await enviar(rutaPase);
   assert.equal(inicial.status, 200);
   assert.equal(inicial.datos.title, evento.title, 'El evento 1 debe ser Festival de otoño.');
   if (inicial.datos.registration === null) {
-    assert.equal((await enviar('POST')).status, 201);
+    assert.equal((await enviar(rutaInscripciones, post)).status, 201);
   } else {
     assert.ok(usuarioExistia, 'Ya existe un pase para un usuario recién creado.');
     console.log('El pase de ejemplo ya estaba inscrito.');
   }
 
-  assert.equal((await enviar('POST')).status, 409);
-  const final = await enviar('GET');
+  assert.equal((await enviar(rutaInscripciones, post)).status, 409);
+  const final = await enviar(rutaPase);
   assert.equal(final.status, 200);
   assert.equal(final.datos.registration?.userId, usuario.userId);
   assert.equal(String(final.datos.registration?.eventId), String(evento.eventId));

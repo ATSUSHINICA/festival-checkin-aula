@@ -4,15 +4,15 @@
 
 **Objetivo.** Usa el mismo evento y el mismo usuario para crear una inscripción, comprobar que se conserva y detectar una petición duplicada.
 
-**Punto de partida.** Trabaja en `festival-checkin-01` con las variables de AWS y el mismo `pase_url` del [caso 3](3-consultar-inscripcion.md). Si abriste otra terminal, recupera la configuración, los identificadores anotados y la URL con los bloques del caso 3.
+**Punto de partida.** Trabaja en `festival-checkin-01` con las variables de AWS, `evento_id`, `usuario_id` y el mismo `pase_url` del [caso 3](3-consultar-inscripcion.md). Si abriste otra terminal, recupera la configuración, los identificadores anotados y la URL con los bloques del caso 3.
 
 ## Sigue el POST
 
-En [serverless.yml](serverless.yml), `functions → inscribirUsuario → events → httpApi` conecta **POST `/events/{eventId}/registrations/{userId}`** con su handler. El camino de la URL coincide con el GET. El método HTTP determina qué Lambda se ejecuta.
+En [serverless.yml](serverless.yml), `functions → inscribirUsuario → events → httpApi` conecta **POST `/events/{eventId}/registrations`** con su handler. El evento se elige en la URL. El usuario viaja en el JSON del cuerpo. Para consultar la inscripción concreta, el GET usa los dos IDs en la URL.
 
 | Abre en este orden | Qué ocurre |
 | --- | --- |
-| [Handler](src/inscripciones/inscribir-usuario/handler.mjs) | Lee la clave de la ruta, llama directamente a `inscribirUsuarioService(clave)` y devuelve HTTP 201 al guardar la inscripción. |
+| [Handler](src/inscripciones/inscribir-usuario/handler.mjs) | Extrae `eventId` de `pathParameters` y lee `userId` con `JSON.parse(event.body)`. Llama directamente a `inscribirUsuarioService` y devuelve HTTP 201 al guardar la inscripción. |
 | [Service](src/inscripciones/inscribir-usuario/service.mjs) | Comprueba el evento con [buscarEventoService](src/eventos/buscar-evento/service.mjs) y el usuario con [buscarUsuarioRepository](src/usuarios/buscar-usuario/repository.mjs). Obtiene la fecha de inscripción en UTC y llama a `inscribirUsuarioRepository`. |
 | [Repository](src/inscripciones/inscribir-usuario/repository.mjs) | `PutItemCommand` guarda la inscripción a través de `MODELO_INSCRIPCION`. La condición impide sustituir un pase existente. |
 | [Búsqueda de usuario](src/usuarios/buscar-usuario/repository.mjs) | `GetItemCommand` consulta `MODELO_USUARIO` por su clave y pide solo `userId`. Es suficiente para comprobar que el perfil existe. |
@@ -23,9 +23,16 @@ Predice qué pasará con la fecha de inscripción cuando envíes dos POST para l
 ## Envía, repite y consulta
 
 ```bash
-curl -sS -i -X POST "${pase_url:?Completa el caso 3 para recuperar la URL del pase}"
-curl -sS -i -X POST "$pase_url"
-curl -sS -i "$pase_url"
+inscripciones_url="${api_url%/}/events/${evento_id:?Recupera el ID del evento}/registrations"
+cuerpo="{\"userId\":\"${usuario_id:?Recupera el ID del usuario}\"}"
+
+curl -sS -i -X POST "$inscripciones_url" \
+  -H 'Content-Type: application/json' -d "$cuerpo"
+
+curl -sS -i -X POST "$inscripciones_url" \
+  -H 'Content-Type: application/json' -d "$cuerpo"
+
+curl -sS -i "${pase_url:?Completa el caso 3 para recuperar la URL del pase}"
 ```
 
 | Petición | Resultado esperado con un pase nuevo |
