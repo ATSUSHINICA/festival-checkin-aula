@@ -17,7 +17,7 @@ Usa el mismo evento y usuario de principio a fin. En cada caso, abre primero `se
 | Leer el evento y observar el pase antes de inscribir | [Consultar una inscripción](3-consultar-inscripcion.md) | [Consultar inscripción con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm) |
 | Crear la relación, comprobar el 409 y leer la fecha | [Inscribir a un usuario](4-inscribir-usuario.md) | [Inscribir con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm) |
 
-[Abre las pestañas de invocación con AWS CLI](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invocaciones) para ejecutar cada función del clon. En [Invoke · Listar eventos](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invoke-listar-eventos) puedes comprobar el alta y leer las páginas del listado.
+[Abre las pestañas de invocación con Serverless](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invocaciones) para ejecutar cada función del clon. `--function` usa la clave de `functions` en tu `serverless.yml` y `--data` contiene el JSON que recibe el handler. En [Invoke · Listar eventos](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invoke-listar-eventos) puedes comprobar el alta y leer las páginas del listado.
 
 ## 1. Clona y comprueba el proyecto
 

@@ -8,7 +8,7 @@
 
 ## Sigue el código
 
-En [serverless.yml](serverless.yml), `functions → crearUsuario` apunta a `src/usuarios/crear-usuario/handler.handler`. La invocas directamente con AWS CLI.
+En [serverless.yml](serverless.yml), `functions → crearUsuario` apunta a `src/usuarios/crear-usuario/handler.handler`. La invocas desde la terminal con `serverless invoke --function crearUsuario`.
 
 | Abre en este orden | Qué ocurre |
 | --- | --- |
@@ -25,16 +25,13 @@ El código de ejemplo reutiliza el ID del evento para identificar el perfil de e
 usuario_id="usuario-aula-${evento_id:?Completa el caso 1 y recupera evento_id}"
 printf 'ID del usuario de clase: %s\n' "$usuario_id"
 
-aws lambda invoke \
-  --function-name "festival-check-in-${FCI_EQUIPO}-crearUsuario" \
-  --profile "$AWS_PROFILE" --region "$AWS_REGION" \
-  --cli-binary-format raw-in-base64-out \
-  --payload "{\"userId\":\"$usuario_id\",\"firstName\":\"Leo\",\"lastName\":\"Martin\",\"email\":\"leo.martin@example.com\",\"city\":\"Huesca\"}" \
-  respuesta-usuario.json &&
-cat respuesta-usuario.json
+npx --no-install serverless invoke \
+  --function crearUsuario \
+  --aws-profile "$AWS_PROFILE" \
+  --data "{\"userId\":\"$usuario_id\",\"firstName\":\"Leo\",\"lastName\":\"Martin\",\"email\":\"leo.martin@example.com\",\"city\":\"Huesca\"}"
 ```
 
-Comprueba que la invocación no contiene `FunctionError` y que el JSON devuelve el `userId` que has enviado.
+Comprueba que el JSON que imprime Serverless devuelve el `userId` que has enviado.
 
 ## Lee el perfil por su clave
 

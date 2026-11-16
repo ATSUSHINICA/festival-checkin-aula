@@ -16,7 +16,7 @@ crearEvento:
   handler: src/eventos/crear-evento/handler.handler
 ```
 
-`${self:service}` lee `service` y `${self:provider.stage}` lee `stage` dentro de `provider`. Ambas referencias buscan el valor en este mismo YAML. Con el equipo `equipo01`, la función se llama `festival-check-in-equipo01-crearEvento`. En `handler.handler`, el primer `handler` es el nombre del archivo y el segundo es la función que exporta. Tú la invocarás con AWS CLI.
+`${self:service}` lee `service` y `${self:provider.stage}` lee `stage` dentro de `provider`. Ambas referencias buscan el valor en este mismo YAML. Con el equipo `equipo01`, la función se llama `festival-check-in-equipo01-crearEvento`. En `handler.handler`, el primer `handler` es el nombre del archivo y el segundo es la función que exporta. La invocarás con `serverless invoke --function crearEvento`.
 
 | Abre en este orden | Qué ocurre |
 | --- | --- |
@@ -35,41 +35,34 @@ Este bloque prepara un ID de ejemplo a partir de la hora actual en milisegundos.
 evento_id=$(node -p 'Date.now()')
 printf 'ID del evento de clase: %s\n' "$evento_id"
 
-aws lambda invoke \
-  --function-name "festival-check-in-${FCI_EQUIPO}-crearEvento" \
-  --profile "$AWS_PROFILE" --region "$AWS_REGION" \
-  --cli-binary-format raw-in-base64-out \
-  --payload "{\"eventId\":$evento_id,\"title\":\"Concierto de aula\"}" \
-  respuesta-evento.json &&
-cat respuesta-evento.json
+npx --no-install serverless invoke \
+  --function crearEvento \
+  --aws-profile "$AWS_PROFILE" \
+  --data "{\"eventId\":$evento_id,\"title\":\"Concierto de aula\"}"
 ```
 
-Comprueba que la salida de la invocación no contiene `FunctionError` y que el JSON devuelve tu `eventId` y el título. El `StatusCode: 200` de AWS CLI indica que Lambda atendió la invocación. El JSON devuelto te permite comprobar el resultado de la función.
+Comprueba que el JSON que imprime Serverless devuelve tu `eventId` y el título. Si la función falla, Serverless muestra el error en la terminal.
 
 ## Busca el evento desde Lambda
 
-Desde la raíz de `festival-checkin-01`, después de desplegar y ejecutar `npm run aula`, busca el evento de ejemplo. El comando usa el equipo `equipo01`, el perfil `default` y la región `us-east-1`. Si tu despliegue usa otros valores, cámbialos en el comando. En [serverless.yml](serverless.yml), `functions → buscarEvento` conecta la Lambda con [buscarEventoHandler](src/eventos/buscar-evento/handler.mjs). El handler lee el número del JSON y llama a [buscarEventoService](src/eventos/buscar-evento/service.mjs). El [repository](src/eventos/buscar-evento/repository.mjs) recupera el ítem con `GetItemCommand` y `MODELO_EVENTO`.
+Desde la raíz de `festival-checkin-01`, después de desplegar y ejecutar `npm run aula`, busca el evento de ejemplo. Serverless lee el equipo y la región del YAML, que toma los valores de las variables de tu terminal. En [serverless.yml](serverless.yml), `functions → buscarEvento` conecta la Lambda con [buscarEventoHandler](src/eventos/buscar-evento/handler.mjs). El handler lee el número del JSON y llama a [buscarEventoService](src/eventos/buscar-evento/service.mjs). El [repository](src/eventos/buscar-evento/repository.mjs) recupera el ítem con `GetItemCommand` y `MODELO_EVENTO`.
 
 ```bash
-aws lambda invoke \
-  --function-name festival-check-in-equipo01-buscarEvento \
-  --profile default \
-  --region us-east-1 \
-  --cli-binary-format raw-in-base64-out \
-  --payload '{"eventId": 1}' \
-  respuesta-buscar-evento.json &&
-cat respuesta-buscar-evento.json
+npx --no-install serverless invoke \
+  --function buscarEvento \
+  --aws-profile "$AWS_PROFILE" \
+  --data '{"eventId": 1}'
 ```
 
 Cada parámetro tiene una función. Si quieres buscar el evento que creaste antes, sustituye el `1` del JSON por el número que anotaste.
 
 | Paso | Qué recibe y qué entrega |
 | --- | --- |
-| **AWS CLI → Handler** | `--function-name` elige la Lambda. `--payload` lleva el número que se va a buscar. AWS entrega `{"eventId": 1}` como objeto JavaScript al parámetro `event`. |
+| **Serverless → Handler** | `--function buscarEvento` elige la función declarada en el YAML. `--data` lleva el número que se va a buscar. AWS entrega `{"eventId": 1}` como objeto JavaScript al parámetro `event`. |
 | **Handler → Service** | `const { eventId } = event ?? {};` extrae la propiedad. Es como leer `event.eventId` cuando existe el objeto. Si falta el objeto, `?? {}` permite que la comprobación detecte el ID ausente. El handler comprueba que llega un entero positivo seguro y llama a `buscarEventoService(1)`. |
 | **Service → Repository** | `buscarEventoRepository(1)` recibe un número. En `.key({ eventId })`, las llaves crean el objeto `{ eventId: 1 }` que espera Toolbox. |
 | **Repository → DynamoDB** | `MODELO_EVENTO` traduce `eventId` a `EVENT_ID`. `.send()` envía un `GetItem` a la tabla de eventos de tu equipo con la clave numérica `EVENT_ID = 1`. Esa única clave identifica el ítem del evento. |
-| **DynamoDB → Terminal** | DynamoDB devuelve el ítem con `EVENT_ID` y `TITLE`. Toolbox lo devuelve al repository como `Item: { eventId: 1, title: "Festival de otoño" }`. Service y handler devuelven el resultado, y AWS CLI lo escribe en `respuesta-buscar-evento.json`. |
+| **DynamoDB → Terminal** | DynamoDB devuelve el ítem con `EVENT_ID` y `TITLE`. Toolbox lo devuelve al repository como `Item: { eventId: 1, title: "Festival de otoño" }`. Service y handler devuelven el resultado, y Serverless imprime el resultado en la terminal. |
 
 **Antes de avanzar.** Comprueba que la respuesta contiene `eventId: 1` y el título «Festival de otoño». Si pruebas con un ID válido que no existe, la salida es `null`.
 

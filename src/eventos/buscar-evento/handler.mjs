@@ -1,16 +1,13 @@
 import { buscarEventoService } from './service.mjs';
 
 /**
- * AWS Lambda entrega el JSON enviado en --payload como un objeto JavaScript.
+ * AWS Lambda entrega el JSON enviado en --data como un objeto JavaScript.
  * @param {{ eventId: number }} event ID numérico enviado en el JSON.
  * @example
- * aws lambda invoke \
- *   --function-name festival-check-in-equipo01-buscarEvento \
- *   --profile default \
- *   --region us-east-1 \
- *   --cli-binary-format raw-in-base64-out \
- *   --payload '{"eventId": 1}' \
- *   respuesta-buscar-evento.json
+ * npx --no-install serverless invoke \
+ *   --function buscarEvento \
+ *   --aws-profile "$AWS_PROFILE" \
+ *   --data '{"eventId": 1}'
  */
 export function buscarEventoHandler(event) {
   const { eventId } = event ?? {};
