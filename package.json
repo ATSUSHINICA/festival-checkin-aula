@@ -6,7 +6,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "deploy": "serverless deploy",
+    "deploy": "node ./node_modules/serverless/bin/serverless.js deploy",
     "aula": "node scripts/aula.mjs"
   },
   "dependencies": {
