@@ -1,18 +1,9 @@
-import { PutCommand } from '@aws-sdk/lib-dynamodb';
-import { db, TABLA_USUARIOS_FCI } from '../../datos/dynamo.mjs';
+import { PutItemCommand } from 'dynamodb-toolbox/entity/actions/put';
+import { MODELO_USUARIO } from '../models/usuario.model.mjs';
 
-export async function crearUsuarioRepository({ userId, firstName, lastName, email, city }) {
-  const item = {
-    USER_ID: userId,
-    FIRST_NAME: firstName,
-    LAST_NAME: lastName,
-    EMAIL: email,
-    CITY: city
-  };
-
-  await db.send(new PutCommand({
-    TableName: TABLA_USUARIOS_FCI,
-    Item: item,
-    ConditionExpression: 'attribute_not_exists(USER_ID)'
-  }));
+export async function crearUsuarioRepository(perfil) {
+  await MODELO_USUARIO.build(PutItemCommand)
+    .item(perfil)
+    .options({ condition: { attr: 'userId', exists: false } })
+    .send();
 }

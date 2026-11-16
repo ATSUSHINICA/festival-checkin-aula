@@ -1,6 +1,7 @@
 import { json } from '../http/peticion.mjs';
 import { buscarEventoService } from '../../eventos/buscar-evento/service.mjs';
-import { buscarUsuarioRepository, inscribirUsuarioRepository } from './repository.mjs';
+import { buscarUsuarioRepository } from '../../usuarios/buscar-usuario/repository.mjs';
+import { inscribirUsuarioRepository } from './repository.mjs';
 
 export async function inscribirUsuarioService({ eventId, userId }) {
   const evento = await buscarEventoService(eventId);
