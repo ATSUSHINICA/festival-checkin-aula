@@ -19,6 +19,8 @@ Usa el mismo evento y usuario de principio a fin. En cada caso, abre primero `se
 
 [Abre las pestañas de invocación con Serverless](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invocaciones) para ejecutar cada función del clon. `--function` usa la clave de `functions` en tu `serverless.yml` y `--data` contiene el JSON que recibe el handler. En [Invoke · Listar eventos](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invoke-listar-eventos) puedes comprobar el alta y leer las páginas del listado.
 
+[Abre la chuleta de 12 lecturas](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/consultas-dynamodb/) para comparar GetItem, Query y Scan con las tres tablas del festival.
+
 ## 1. Clona y comprueba el proyecto
 
 Usa Git Bash en Windows o Terminal en macOS. Necesitas Git, Node.js 20 o superior y AWS CLI v2. Usa la versión compatible que ya tengas instalada. Lambda ejecuta Node 22 en AWS.
