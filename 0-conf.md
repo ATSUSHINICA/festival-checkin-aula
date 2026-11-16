@@ -287,24 +287,32 @@ Comprueba que reaparece el campo `Item` y que dentro siguen el mismo ID y el mis
 
 ### Consulta el mismo evento con PartiQL
 
-**PartiQL** es el lenguaje con sintaxis parecida a SQL que usamos para consultar DynamoDB. Aquí puedes escribir **`1` directamente**. En el `WHERE`, `1` sin comillas es un número y `'1'` entre comillas simples es texto.
+**Primero, lee la consulta como SQL.** Si tu equipo es `equipo01`, este `SELECT` pide la ficha del evento **1**.
 
-| Cómo pides el evento 1 | Cómo se indica el tipo |
+```sql
+SELECT *
+FROM FCI_EVENTOS_equipo01
+WHERE EVENT_ID = 1
+```
+
+| Línea | Qué le pides |
 | --- | --- |
-| `--key '{"EVENT_ID":{"N":"1"}}'` | La etiqueta `N` indica que el valor es numérico. |
-| `WHERE EVENT_ID = 1` | PartiQL reconoce el número porque lo escribes sin comillas. |
+| `SELECT *` | Devuelve todos los atributos de cada evento, como `EVENT_ID` y `TITLE`. |
+| `FROM FCI_EVENTOS_equipo01` | Lee la tabla de eventos del equipo `equipo01`. |
+| `WHERE EVENT_ID = 1` | Busca por la clave de partición. El `1` sin comillas es un número. |
 
-Desde la raíz del proyecto, en la misma terminal del paso 4, ejecuta:
+**Después, envía ese SELECT a DynamoDB.** DynamoDB entiende esta consulta mediante **PartiQL**, su lenguaje con sintaxis parecida a SQL. Con `get-item --key` escribiste `{"N":"1"}` para indicar el tipo. En PartiQL basta con escribir `EVENT_ID = 1`.
+
+Desde la raíz del proyecto, usa la misma terminal del paso 4. AWS CLI toma el perfil y la región de `AWS_PROFILE` y `AWS_REGION`, que ya exportaste.
 
 ```bash
 aws dynamodb execute-statement \
   --statement "SELECT * FROM \"FCI_EVENTOS_${FCI_EQUIPO}\" WHERE EVENT_ID = 1" \
-  --profile "$AWS_PROFILE" --region "$AWS_REGION" \
   --consistent-read --output json
 ```
 
-- **`--statement`** entrega la consulta completa a DynamoDB. Las comillas exteriores permiten que Bash sustituya `FCI_EQUIPO`. Cada `\"` hace que las comillas del nombre de la tabla lleguen a PartiQL.
-- **`SELECT *`** pide todos los atributos del ítem. **`FROM`** indica la tabla de tu equipo. **`WHERE EVENT_ID = 1`** busca por la clave de partición.
+- **`execute-statement`** ejecuta una instrucción PartiQL. **`--statement`** recibe el `SELECT` entero como un solo argumento.
+- **`${FCI_EQUIPO}`** se sustituye en la terminal por tu código, por ejemplo `equipo01`. Cada `\"` conserva una comilla alrededor del nombre de la tabla al enviarlo a PartiQL.
 
 ```json
 {
@@ -317,7 +325,26 @@ aws dynamodb execute-statement \
 }
 ```
 
-**Antes de avanzar**, busca `EVENT_ID` y `TITLE` en la lista `Items`. Debes ver el mismo evento **1**, «Festival de otoño». En la consulta escribiste `1` directamente. En la respuesta, DynamoDB vuelve a usar sus etiquetas `N` y `S` para indicar el tipo de cada atributo. [SELECT en PartiQL](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ql-reference.select.html) · [execute-statement en AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/dynamodb/execute-statement.html) · [Ejemplos en el cuaderno web](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#comprobar-datos)
+Comprueba que `Items` contiene el evento **1**, «Festival de otoño». En la respuesta JSON, DynamoDB usa `N` y `S` para indicar el tipo de cada atributo.
+
+### Lista todos los eventos con PartiQL
+
+**Primero, lee el SELECT.** Quita la línea `WHERE` para pedir todos los eventos de la tabla.
+
+```sql
+SELECT *
+FROM FCI_EVENTOS_equipo01
+```
+
+**Después, ejecútalo con AWS CLI.**
+
+```bash
+aws dynamodb execute-statement \
+  --statement "SELECT * FROM \"FCI_EVENTOS_${FCI_EQUIPO}\"" \
+  --consistent-read --output json
+```
+
+**Antes de avanzar**, compara las dos listas `Items`. La primera contiene solo el evento **1**. La segunda incluye también cualquier otro evento que hayas creado. Si solo cargaste «Festival de otoño», ambas listas tienen un elemento. Al omitir `WHERE`, DynamoDB recorre la tabla y puede devolver varias páginas si hay muchos registros. [SELECT en PartiQL](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ql-reference.select.html) · [execute-statement en AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/dynamodb/execute-statement.html) · [Ejemplos en el cuaderno web](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#comprobar-datos)
 
 ### Comprueba el mismo evento en la pantalla
 
