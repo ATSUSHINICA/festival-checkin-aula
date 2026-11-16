@@ -10,6 +10,11 @@ import { inscribirUsuarioService } from './service.mjs';
  *   --function inscribirUsuario \
  *   --aws-profile "$AWS_PROFILE" \
  *   --data '{"pathParameters":{"eventId":"3"},"body":"{\"userId\":\"usuario-aula-03\"}"}'
+ *
+ * @example HTTP desde la terminal con la URL del despliegue en api_url.
+ * curl -i -X POST "$api_url/events/3/registrations" \
+ *   -H 'Content-Type: application/json' \
+ *   -d '{"userId":"usuario-aula-03"}'
  */
 export async function handler(event) {
   try {

@@ -36,15 +36,31 @@ functions:
   crearEvento:
     name: ${self:service}-${self:provider.stage}-crearEvento
     handler: src/eventos/crear-evento/handler.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /events
   buscarEvento:
     name: ${self:service}-${self:provider.stage}-buscarEvento
     handler: src/eventos/buscar-evento/handler.buscarEventoHandler
+    events:
+      - httpApi:
+          method: GET
+          path: /events/{eventId}
   listarEventos:
     name: ${self:service}-${self:provider.stage}-listarEventos
     handler: src/eventos/listar-eventos/handler.listarEventosHandler
+    events:
+      - httpApi:
+          method: GET
+          path: /events
   crearUsuario:
     name: ${self:service}-${self:provider.stage}-crearUsuario
     handler: src/usuarios/crear-usuario/handler.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /users
   consultarInscripcion:
     handler: src/inscripciones/consultar-inscripcion/handler.handler
     events:

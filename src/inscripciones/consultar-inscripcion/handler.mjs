@@ -10,6 +10,9 @@ import { consultarInscripcionService } from './service.mjs';
  *   --function consultarInscripcion \
  *   --aws-profile "$AWS_PROFILE" \
  *   --data '{"pathParameters": {"eventId": "3", "userId": "usuario-aula-03"}}'
+ *
+ * @example HTTP desde la terminal con la URL del despliegue en api_url.
+ * curl -i "$api_url/events/3/registrations/usuario-aula-03"
  */
 export async function handler(event) {
   try {

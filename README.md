@@ -81,13 +81,38 @@ Para una instalación nueva, verás **GET 200 → POST 201 → POST 409 → GET 
 
 Abre la [pantalla del festival](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#pantalla), elige **AWS**, pega la URL y consulta el evento **1** para **usuario-02**. El pase del usuario figura como **Inscrito**.
 
+## Prueba la API con curl
+
+Tras desplegar, recupera la URL base desde la terminal del proyecto:
+
+```bash
+api_url="$(aws cloudformation describe-stacks \
+  --stack-name "festival-check-in-${FCI_EQUIPO}" \
+  --profile "$AWS_PROFILE" --region "$AWS_REGION" \
+  --query "Stacks[0].Outputs[?OutputKey=='HttpApiUrl'].OutputValue | [0]" --output text)"
+printf '%s\n' "$api_url"
+```
+
+Prueba las rutas con los ejemplos `curl` que hay en cada handler. El mismo método, URL y JSON servirán al hacer la petición desde React Native.
+
+| Operación | Ruta HTTP | Datos que lee el handler |
+| --- | --- | --- |
+| [Crear evento](src/eventos/crear-evento/handler.mjs) | `POST /events` | `eventId` y `title` del JSON |
+| [Listar eventos](src/eventos/listar-eventos/handler.mjs) | `GET /events` | `cursor` opcional en la consulta |
+| [Buscar evento](src/eventos/buscar-evento/handler.mjs) | `GET /events/{eventId}` | `eventId` de la ruta |
+| [Crear usuario](src/usuarios/crear-usuario/handler.mjs) | `POST /users` | Perfil del usuario en el JSON |
+| [Inscribir usuario](src/inscripciones/inscribir-usuario/handler.mjs) | `POST /events/{eventId}/registrations` | `eventId` de la ruta y `userId` del JSON |
+| [Consultar inscripción](src/inscripciones/consultar-inscripcion/handler.mjs) | `GET /events/{eventId}/registrations/{userId}` | Ambos IDs de la ruta |
+
+[Ver las llamadas en el cuaderno](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invocaciones)
+
 ## 4. Sigue el código desde la petición hasta DynamoDB
 
 En `src/eventos/crear-evento/` están los archivos del alta. En `src/eventos/buscar-evento/` están el handler para invocar la búsqueda directamente y el service y repository que también usan **Consultar inscripción** e **Inscribir usuario**. El modelo que comparten el alta y la lectura vive en `src/eventos/models/`. En `src/inscripciones/` están los casos **Consultar inscripción** e **Inscribir usuario**, que trabajan con `FCI_INSCRIPCIONES`. Cada handler llama directamente al service de su caso de uso. Los handlers HTTP usan `http/peticion.mjs` para leer la clave y convertir el resultado en una respuesta para API Gateway. Su modelo de DynamoDB Toolbox está en `models/`.
 
 | Abre | Qué buscar |
 | --- | --- |
-| `serverless.yml` | Las seis funciones, las rutas GET y POST, las tres tablas y el índice `PorUsuario`. Los nombres de tabla llevan el código del equipo. |
+| `serverless.yml` | Las seis funciones, las rutas HTTP, las tres tablas y el índice `PorUsuario`. Los nombres de tabla llevan el código del equipo. |
 | `src/inscripciones/consultar-inscripcion/handler.mjs` | La entrada de API Gateway llama al caso de uso de consulta. |
 | `src/inscripciones/consultar-inscripcion/service.mjs` | Lee el evento y después el pase. Antes de inscribirse, `registration` vale `null`. |
 | `src/inscripciones/inscribir-usuario/service.mjs` y `repository.mjs` | Comprueban las referencias y guardan la inscripción con una condición que protege frente a duplicados. |
