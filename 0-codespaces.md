@@ -30,12 +30,23 @@ nvm install 22
 nvm use 22
 ```
 
-Si falta AWS CLI v2, instálala en el Codespace con el instalador oficial de Linux. [Instalar AWS CLI en Linux](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+### Instala AWS CLI v2 en el Codespace
+
+Si `aws --version` devuelve **`aws: command not found`** o muestra `aws-cli/1.`, copia este comando en la terminal de Codespaces. El instalador oficial añade el comando `aws` al entorno Linux del Codespace. [Instalación de AWS CLI en Linux](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 
 ```bash
 curl -fsSL https://awscli.amazonaws.com/v2/install.sh | sudo bash -s -- --system
+```
+
+Cuando termine, comprueba qué versión responde:
+
+```bash
 aws --version
 ```
+
+**Antes de avanzar**, la salida debe empezar por **`aws-cli/2.`**. En el paso 3 usarás este comando para comprobar que tu perfil `academy` se conecta al laboratorio.
+
+### Instala las dependencias del proyecto
 
 Desde la raíz del repositorio, instala las dependencias fijadas en el proyecto:
 
@@ -44,7 +55,7 @@ npm ci
 npm ls serverless --depth=0
 ```
 
-**Antes de avanzar**, busca `aws-cli/2.` en la comprobación anterior y `serverless@4.45.0` en la salida de npm.
+**Antes de avanzar**, busca `serverless@4.45.0` en la salida de npm.
 
 ## 3. Conecta AWS Academy desde el Codespace
 
