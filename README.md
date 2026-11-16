@@ -83,7 +83,7 @@ Abre la [pantalla del festival](https://albertohdezakkari.github.io/04-PILARES-S
 
 ## 4. Sigue el código desde la petición hasta DynamoDB
 
-En `src/eventos/crear-evento/` están los archivos del alta. En `src/eventos/buscar-evento/` están el handler para invocar la búsqueda directamente y el service y repository que también usan **Consultar inscripción** e **Inscribir usuario**. El modelo que comparten el alta y la lectura vive en `src/eventos/models/`. En `src/inscripciones/` están los casos **Consultar inscripción** e **Inscribir usuario**, que trabajan con `FCI_INSCRIPCIONES`. Sus handlers comparten `http/peticion.mjs` para preparar la llamada al service y responder a API Gateway. Su modelo de DynamoDB Toolbox está en `models/`.
+En `src/eventos/crear-evento/` están los archivos del alta. En `src/eventos/buscar-evento/` están el handler para invocar la búsqueda directamente y el service y repository que también usan **Consultar inscripción** e **Inscribir usuario**. El modelo que comparten el alta y la lectura vive en `src/eventos/models/`. En `src/inscripciones/` están los casos **Consultar inscripción** e **Inscribir usuario**, que trabajan con `FCI_INSCRIPCIONES`. Cada handler llama directamente al service de su caso de uso. Los handlers HTTP usan `http/peticion.mjs` para leer la clave y convertir el resultado en una respuesta para API Gateway. Su modelo de DynamoDB Toolbox está en `models/`.
 
 | Abre | Qué buscar |
 | --- | --- |

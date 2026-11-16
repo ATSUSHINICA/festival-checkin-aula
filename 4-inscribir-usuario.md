@@ -12,11 +12,11 @@ En [serverless.yml](serverless.yml), `functions → inscribirUsuario → events 
 
 | Abre en este orden | Qué ocurre |
 | --- | --- |
-| [Handler](src/inscripciones/inscribir-usuario/handler.mjs) | Usa `handleRequest` para leer la ruta y llama a `inscribirUsuarioService`. |
+| [Handler](src/inscripciones/inscribir-usuario/handler.mjs) | Lee la clave de la ruta, llama directamente a `inscribirUsuarioService(clave)` y devuelve HTTP 201 al guardar la inscripción. |
 | [Service](src/inscripciones/inscribir-usuario/service.mjs) | Comprueba el evento con [buscarEventoService](src/eventos/buscar-evento/service.mjs) y el usuario con [buscarUsuarioRepository](src/usuarios/buscar-usuario/repository.mjs). Obtiene la fecha de inscripción en UTC y llama a `inscribirUsuarioRepository`. |
 | [Repository](src/inscripciones/inscribir-usuario/repository.mjs) | `PutItemCommand` guarda la inscripción a través de `MODELO_INSCRIPCION`. La condición impide sustituir un pase existente. |
 | [Búsqueda de usuario](src/usuarios/buscar-usuario/repository.mjs) | `GetItemCommand` consulta `MODELO_USUARIO` por su clave y pide solo `userId`. Es suficiente para comprobar que el perfil existe. |
-| [Modelo Inscripcion](src/inscripciones/models/inscripcion.model.mjs) y [peticion.mjs](src/inscripciones/http/peticion.mjs) | El modelo traduce los nombres a DynamoDB. Si DynamoDB rechaza una escritura duplicada, `handleRequest` la convierte en HTTP 409. |
+| [Modelo Inscripcion](src/inscripciones/models/inscripcion.model.mjs) y [peticion.mjs](src/inscripciones/http/peticion.mjs) | El modelo traduce los nombres a DynamoDB. Si DynamoDB rechaza una escritura duplicada, el handler usa `responderError` para devolver HTTP 409. |
 
 Predice qué pasará con la fecha de inscripción cuando envíes dos POST para la misma pareja. [Inscripción por capas y ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm)
 

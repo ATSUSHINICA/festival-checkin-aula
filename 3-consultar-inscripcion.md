@@ -12,8 +12,8 @@ En [serverless.yml](serverless.yml), `functions → consultarInscripcion → eve
 
 | Abre en este orden | Qué ocurre |
 | --- | --- |
-| [Handler](src/inscripciones/consultar-inscripcion/handler.mjs) y [peticion.mjs](src/inscripciones/http/peticion.mjs) | El handler delega en `handleRequest`. Este extrae los dos parámetros de la ruta, comprueba su formato y llama a `consultarInscripcionService`. |
-| [Service](src/inscripciones/consultar-inscripcion/service.mjs) | Busca primero el evento. Si falta, devuelve 404. Si existe, busca la inscripción y devuelve 200 con el título y el resultado de esa búsqueda. |
+| [Handler](src/inscripciones/consultar-inscripcion/handler.mjs) y [peticion.mjs](src/inscripciones/http/peticion.mjs) | El handler lee la clave de la ruta, llama directamente a `consultarInscripcionService(clave)` y envuelve los datos de vuelta en una respuesta HTTP 200. |
+| [Service](src/inscripciones/consultar-inscripcion/service.mjs) | Busca primero el evento. Si falta, lanza `NoEncontradoError`. Si existe, devuelve el título y el resultado de buscar la inscripción. El handler convierte los datos o el error en una respuesta HTTP. |
 | [Service de búsqueda](src/eventos/buscar-evento/service.mjs) y [Repository de búsqueda](src/eventos/buscar-evento/repository.mjs) | `buscarEventoService` delega en `buscarEventoRepository`, que lee el evento con `GetItemCommand` usando solo `EVENT_ID`. |
 | [Repositorio de la inscripción](src/inscripciones/consultar-inscripcion/repository.mjs) y [modelo Inscripcion](src/inscripciones/models/inscripcion.model.mjs) | `consultarInscripcionRepository` usa Toolbox para leer la inscripción por la pareja `EVENT_ID` y `USER_ID`. Si el ítem aún no existe, el repositorio devuelve `null`. |
 

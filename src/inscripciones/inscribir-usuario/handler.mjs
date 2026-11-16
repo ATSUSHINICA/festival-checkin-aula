@@ -1,4 +1,4 @@
-import { handleRequest } from '../http/peticion.mjs';
+import { json, leerClaveInscripcion, responderError } from '../http/peticion.mjs';
 import { inscribirUsuarioService } from './service.mjs';
 
 /**
@@ -11,6 +11,12 @@ import { inscribirUsuarioService } from './service.mjs';
  *   --aws-profile "$AWS_PROFILE" \
  *   --data '{"pathParameters": {"eventId": "3", "userId": "usuario-aula-03"}}'
  */
-export function handler(event) {
-  return handleRequest(event, inscribirUsuarioService);
+export async function handler(event) {
+  try {
+    const clave = leerClaveInscripcion(event);
+    const resultado = await inscribirUsuarioService(clave);
+    return json(201, resultado);
+  } catch (error) {
+    return responderError(error);
+  }
 }
