@@ -52,7 +52,13 @@ La ruta debe terminar en `festival-checkin-01` y el nombre del paquete debe ser 
 npm ci && npm ls serverless --depth=0
 ```
 
-`npm ci` instala Serverless Framework en el proyecto. `npm ls` debe mostrar **`serverless@4.45.0`**. En el paso 5 arrancarás la CLI con las variables del laboratorio ya cargadas.
+Aquí clonas un proyecto que ya trae `package-lock.json`. Usa **`npm ci`** para reconstruir `node_modules` con las versiones fijadas en ese archivo. npm detiene la instalación si el archivo de bloqueo y `package.json` están desincronizados.
+
+**`npm ls serverless --depth=0`** muestra la versión de Serverless instalada en esta carpeta. `ls` significa «listar» y `--depth=0` limita la salida a las dependencias directas del proyecto. Debes ver **`serverless@4.45.0`**. El `&&` hace que la comprobación se ejecute solo si la instalación terminó bien.
+
+Cuando estás creando un proyecto y quieres **añadir o cambiar** una dependencia, usas `npm install`. Por ejemplo, `npm install --save-dev --save-exact serverless@4.45.0` añade Serverless como herramienta de desarrollo y actualiza `package.json` y `package-lock.json`. En este clon esos cambios ya están guardados.
+
+En el paso 5 usarás `npx --no-install serverless --version` para **arrancar la CLI** con las variables del laboratorio ya cargadas. Aquí solo compruebas qué versión quedó instalada.
 
 ## 3. Activa AWS Academy y guarda las credenciales
 

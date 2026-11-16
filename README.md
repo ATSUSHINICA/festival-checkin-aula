@@ -25,7 +25,7 @@ aws --version
 npm ci && npm ls serverless --depth=0
 ```
 
-La instalación debe mostrar `serverless@4.45.0`.
+`npm ci` instala las versiones fijadas en `package-lock.json`. El segundo comando lista Serverless como dependencia directa y debe mostrar `serverless@4.45.0`. [Cuándo usar cada comando](0-conf.md#2-clona-e-instala-el-proyecto)
 
 ## 2. Configura tu sesión
 
