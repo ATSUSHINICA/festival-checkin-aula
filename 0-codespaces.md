@@ -99,7 +99,11 @@ export LAMBDA_ROLE_ARN
 
 Si el laboratorio deniega `iam:GetRole`, usa el ARN completo de LabRole que te facilite el profesor.
 
-En el primer uso de Serverless en el Codespace, inicia sesión. Abre en el navegador el enlace que muestra la terminal y completa el acceso. [Inicio de sesión en Serverless Framework](https://www.serverless.com/framework/docs/getting-started#signing-in)
+### Autentica Serverless Framework v4
+
+La rama `main` instala **Serverless Framework 4.45.0**, que requiere autenticación con Serverless para desplegar. La prueba local de la rama `local` usa **Serverless Framework 3.40.0 y Serverless Offline**. Esa prueba arranca sin iniciar sesión en Serverless. [Requisito de autenticación de la v4](https://www.serverless.com/framework/docs/guides/upgrading-v4#authentication-requirement)
+
+En el primer uso de Serverless v4 en el Codespace, ejecuta este comando. Abre en el navegador el enlace que muestra la terminal y completa el acceso. [Inicio de sesión en Serverless Framework](https://www.serverless.com/framework/docs/getting-started#signing-in)
 
 ```bash
 npx --no-install serverless login
