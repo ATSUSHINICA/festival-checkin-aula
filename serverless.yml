@@ -43,8 +43,8 @@ functions:
   crearUsuario:
     name: ${self:service}-${self:provider.stage}-crearUsuario
     handler: src/usuarios/crear-usuario/handler.handler
-  consultarPase:
-    handler: src/inscripciones/consultar-pase/handler.handler
+  consultarInscripcion:
+    handler: src/inscripciones/consultar-inscripcion/handler.handler
     events:
       - httpApi:
           method: GET

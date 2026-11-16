@@ -49,4 +49,4 @@ aws dynamodb get-item \
 
 **Para aplicarlo a tu proyecto.** Identifica qué segundo registro necesita tu caso de uso y qué clave emplearás para recuperarlo al crear la relación.
 
-[Siguiente · Consultar un pase](3-consultar-pase.md)
+[Siguiente · Consultar una inscripción](3-consultar-inscripcion.md)

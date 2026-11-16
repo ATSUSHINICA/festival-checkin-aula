@@ -4,7 +4,7 @@
 
 **Objetivo.** Usa el mismo evento y el mismo usuario para crear una inscripción, comprobar que se conserva y detectar una petición duplicada.
 
-**Punto de partida.** Trabaja en `festival-checkin-01` con las variables de AWS y el mismo `pase_url` del [caso 3](3-consultar-pase.md). Si abriste otra terminal, recupera la configuración, los identificadores anotados y la URL con los bloques del caso 3.
+**Punto de partida.** Trabaja en `festival-checkin-01` con las variables de AWS y el mismo `pase_url` del [caso 3](3-consultar-inscripcion.md). Si abriste otra terminal, recupera la configuración, los identificadores anotados y la URL con los bloques del caso 3.
 
 ## Sigue el POST
 
