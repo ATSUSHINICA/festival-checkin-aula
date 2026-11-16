@@ -1,5 +1,7 @@
 # 3 · Consultar un pase
 
+**En el cuaderno web** · [Consultar por capas](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#leer-pase) · [Consultar con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm)
+
 **Objetivo.** Sigue una petición GET por las capas y comprueba que un evento existente puede devolver un pase aún sin inscripción.
 
 **Punto de partida.** Sigue en `festival-checkin-01` con el evento y el usuario de los casos [1](1-crear-evento.md) y [2](2-crear-usuario.md). Si cambiaste de terminal, recupera las variables del [paso 4 de configuración](0-conf.md#4-configura-y-comprueba-tu-despliegue) y asigna los valores de `evento_id` y `usuario_id` que anotaste.

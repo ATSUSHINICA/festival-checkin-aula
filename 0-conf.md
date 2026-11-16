@@ -1,5 +1,7 @@
 # 0 · Configura Festival Check-in desde cero
 
+**En el cuaderno web** · [Preparar AWS Academy](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#iniciar-lab) · [Leer el YAML](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#infraestructura) · [Entender el despliegue](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#desplegar-stack)
+
 Usa **Git Bash** en Windows o **Terminal** en macOS. Ejecuta los bloques en orden y conserva la misma terminal para que las variables sigan disponibles.
 
 ## 1. Instala y comprueba las herramientas

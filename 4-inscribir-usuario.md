@@ -1,5 +1,7 @@
 # 4 · Inscribir a un usuario
 
+**En el cuaderno web** · [Inscribir por capas](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#construir-post) · [Inscribir con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm)
+
 **Objetivo.** Usa el mismo evento y el mismo usuario para crear una inscripción, comprobar que se conserva y detectar una petición duplicada.
 
 **Punto de partida.** Trabaja en `festival-checkin-01` con las variables de AWS y el mismo `pase_url` del [caso 3](3-consultar-pase.md). Si abriste otra terminal, recupera la configuración, los identificadores anotados y la URL con los bloques del caso 3.

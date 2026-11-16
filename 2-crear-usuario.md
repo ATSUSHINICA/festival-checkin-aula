@@ -1,5 +1,7 @@
 # 2 · Crear un usuario
 
+**En el cuaderno web** · [Programar Lambda](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#archivo-lambda) (elige **Usuarios · handler.mjs**) · [Invocar crearUsuario](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#sembrar-usuarios)
+
 **Objetivo.** Guarda el perfil ficticio que se inscribirá al evento del paso anterior.
 
 **Punto de partida.** Sigue en `festival-checkin-01`, en la misma terminal del [caso 1](1-crear-evento.md). Si abriste otra, recupera las variables del [paso 4 de configuración](0-conf.md#4-configura-y-comprueba-tu-despliegue) y asigna a `evento_id` el ID que anotaste.

@@ -1,10 +1,10 @@
 # 1 · Crear un evento
 
+**En el cuaderno web** · [Crear por capas](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos) · [Crear con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos-orm) · [Infografía de la traza](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/traza-evento/)
+
 **Objetivo.** Invoca una Lambda desde la terminal y sigue el título hasta el ítem que se guarda en DynamoDB.
 
 **Punto de partida.** Completa [0-conf.md](0-conf.md). Trabaja desde la raíz de `festival-checkin-01`, con el despliegue hecho y las variables `AWS_PROFILE`, `AWS_REGION` y `FCI_EQUIPO` cargadas en esa terminal.
-
-[Abre la infografía interactiva y sigue la traza en paralelo](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/traza-evento/).
 
 ## Sigue el código
 
