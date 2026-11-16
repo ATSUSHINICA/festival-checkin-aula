@@ -2,7 +2,15 @@
 
 Usa **Git Bash** en Windows o **Terminal** en macOS. Ejecuta los bloques en orden y conserva la misma terminal para que las variables sigan disponibles.
 
-## 1. Comprueba tus herramientas
+## 1. Instala y comprueba las herramientas
+
+| Herramienta | Windows | macOS |
+| --- | --- | --- |
+| Git | Instala Git for Windows y abre **Git Bash** desde Inicio. [Descargar Git](https://git-scm.com/install/windows) | En Terminal puedes instalar las herramientas de Apple con `xcode-select --install`. [Alternativas de instalación](https://git-scm.com/install/mac) |
+| Node.js | Si necesitas instalarlo, elige la **última versión LTS** y el instalador `.msi` para tu equipo. [Descargar Node.js](https://nodejs.org/en/download) | Si necesitas instalarlo, elige la **última versión LTS** y el instalador `.pkg` para tu equipo. [Descargar Node.js](https://nodejs.org/en/download) |
+| AWS CLI v2 | Descarga y ejecuta el instalador `.msi`. [Instalador oficial](https://awscli.amazonaws.com/AWSCLIV2.msi) | Descarga y abre el instalador `.pkg`. [Instalador oficial](https://awscli.amazonaws.com/AWSCLIV2.pkg) |
+
+Si acabas de instalar algo, cierra y vuelve a abrir Git Bash o Terminal. Comprueba las versiones:
 
 ```bash
 git --version
@@ -11,7 +19,9 @@ npm --version
 aws --version
 ```
 
-Necesitas Git, **Node.js 20 o superior** y AWS CLI v2. Si tu versión de Node cumple el mínimo, usa la que ya tienes instalada. Si es anterior, instala una versión compatible y vuelve a abrir la terminal. Node 22 es la versión que ejecuta Lambda en AWS. [Git](https://git-scm.com/install) · [Node.js](https://nodejs.org/en/download) · [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+Puedes conservar tu versión local de **Node.js 20 o superior**. Si vas a instalar Node desde cero, el selector de la web oficial muestra la última LTS disponible. El instalador incluye npm. `aws --version` debe empezar por `aws-cli/2.`. Lambda ejecuta Node 22 en AWS.
+
+Serverless Framework se instala con las dependencias del proyecto en el paso 2. El acceso a AWS Academy se hace en el navegador en el paso 3.
 
 ## 2. Clona e instala el proyecto
 
@@ -29,18 +39,28 @@ cd festival-checkin-01 &&
 git pull --ff-only
 ```
 
-Desde la raíz de `festival-checkin-01`:
+Si la terminal ya está en `festival-checkin-01`, ejecuta solo `git pull --ff-only`. Confirma dónde estás antes de instalar:
 
 ```bash
 pwd
-npm ci && npm test
+npm pkg get name
 ```
 
-La ruta debe terminar en `festival-checkin-01` y la prueba local debe mostrar **`pass 1` y `fail 0`**. La prueba recorre los cuatro handlers con DynamoDB simulado.
+La ruta debe terminar en `festival-checkin-01` y el nombre del paquete debe ser `"festival-checkin-01"`. Si estás en `festival-checkin` o ves `Error: no test specified`, abre el clon correcto y repite el bloque.
+
+```bash
+npm ci && npm test && npm ls serverless --depth=0
+```
+
+La prueba local recorre los cuatro handlers con DynamoDB simulado y debe mostrar **`pass 1` y `fail 0`**.
+
+`npm ci` instala Serverless Framework en el proyecto. `npm ls` debe mostrar **`serverless@4.45.0`**. En el paso 5 arrancarás la CLI con las variables del laboratorio ya cargadas.
 
 ## 3. Activa AWS Academy y guarda las credenciales
 
-En **AWS Academy → Learner Lab**, pulsa **Start Lab**. Cuando el laboratorio esté activo, abre **AWS Details → AWS CLI → Show** y copia el bloque de la sesión.
+Entra en **AWS Academy** desde la invitación del centro o el enlace del curso. Acepta la invitación si es tu primer acceso y comprueba que puedes abrir el **Learner Lab** asignado. Si el curso o el laboratorio no aparece, pide al profesor que compruebe tu acceso. [AWS Academy](https://aws.amazon.com/training/awsacademy/)
+
+Dentro de **Learner Lab**, pulsa **Start Lab**. Cuando el laboratorio esté activo, abre **AWS Details → AWS CLI → Show** y copia el bloque de la sesión.
 
 ```bash
 mkdir -p ~/.aws &&
@@ -57,7 +77,7 @@ La sección debe contener `aws_access_key_id`, `aws_secret_access_key` y `aws_se
 aws configure list-profiles
 ```
 
-La lista debe incluir `academy`. Si ya tenías la sesión del laboratorio guardada en `[default]`, puedes usar `default` en el paso siguiente. [Preparación visual en el cuaderno](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#iniciar-lab)
+La lista debe incluir `academy`. Si AWS muestra `The config profile (academy) could not be found`, abre `~/.aws/credentials` de nuevo y comprueba la cabecera `[academy]`. Si ya tenías la sesión del laboratorio guardada en `[default]`, puedes usar `default` en el paso siguiente. [Preparación visual en el cuaderno](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#iniciar-lab)
 
 ## 4. Configura y comprueba tu despliegue
 
@@ -91,18 +111,39 @@ En `serverless.yml`, el código de equipo se convierte en el entorno de Serverle
 
 ## 5. Despliega y carga los datos de ejemplo
 
-Desde la raíz de `festival-checkin-01`, en la misma terminal del paso 4. Si abriste otra, vuelve a ejecutar el paso 4 para recuperar las cuatro variables. El bloque comprueba que tengan valor antes de arrancar Serverless.
+### Accede a Serverless Framework
+
+En el primer uso en un equipo nuevo, abre el inicio de sesión del Framework desde la raíz del clon:
+
+```bash
+npx --no-install serverless login
+```
+
+En el navegador, inicia sesión o registra tu cuenta de Serverless Framework y vuelve a la terminal cuando se complete. Si ya tienes la sesión iniciada, continúa con el despliegue. El acceso de Serverless habilita su CLI. La sesión del Learner Lab proporciona las credenciales para desplegar en AWS. [Inicio de sesión de Serverless Framework](https://www.serverless.com/framework/docs/getting-started#signing-in)
+
+En la misma terminal, verifica que inicia la CLI con la configuración del proyecto:
+
+```bash
+npx --no-install serverless --version
+```
+
+Debe mostrar la versión del Framework. Si aparece un error al resolver una variable del YAML, vuelve al paso 4 y recupera los valores en esa terminal.
+
+### Despliega tu entorno y carga los datos
+
+Desde la raíz de `festival-checkin-01`, en la misma terminal del paso 4. Si abriste otra, vuelve a ejecutar el paso 4 para recuperar las cuatro variables. El bloque comprueba que tengan valor y que la sesión de AWS siga activa antes de arrancar Serverless. Si ves `--aws-profile` vacío o un error en `env:FCI_EQUIPO`, recupera las cuatro variables en el paso 4.
 
 ```bash
 : "${AWS_PROFILE:?Vuelve al paso 4 y exporta AWS_PROFILE}" &&
 : "${AWS_REGION:?Vuelve al paso 4 y exporta AWS_REGION}" &&
 : "${FCI_EQUIPO:?Vuelve al paso 4 y exporta FCI_EQUIPO}" &&
 : "${LAMBDA_ROLE_ARN:?Vuelve al paso 4 y exporta LAMBDA_ROLE_ARN}" &&
+aws sts get-caller-identity --profile "$AWS_PROFILE" --region "$AWS_REGION" &&
 npm run deploy -- --aws-profile "$AWS_PROFILE" &&
 npm run aula
 ```
 
-Si Serverless Framework solicita su propio inicio de sesión, ejecuta `npx serverless login`, completa el acceso en el navegador y repite el bloque de despliegue.
+Comprueba que la línea del comando muestra `serverless deploy --aws-profile academy` o el perfil que hayas elegido. Serverless debe confirmar el despliegue de `festival-check-in-equipo01`, con tu código al final. Si AWS responde `ExpiredToken`, renueva los tres valores del perfil como indica el paso 4 y repite el bloque. Si el despliegue terminó y falló solo la carga de datos, ejecuta `npm run aula` de nuevo después de corregir el error.
 
 `npm run aula` carga el evento **1** y el perfil ficticio **`usuario-02`**. En un entorno nuevo debe mostrar **GET 200 → POST 201 → POST 409 → GET 200**. El 409 confirma que se bloqueó la segunda inscripción. Al repetir una prueba ya completada, el pase existente se conserva. Guarda la URL de la API que aparece al final.
 
