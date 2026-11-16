@@ -2,6 +2,8 @@
 
 Proyecto de aula listo para clonar. Crearás los recursos en AWS Academy, cargarás un evento y un perfil ficticio y comprobarás el pase por HTTP.
 
+**Para empezar en clase, sigue [0-conf.md](0-conf.md) de principio a fin.**
+
 ## 1. Clona y comprueba el proyecto
 
 Usa Git Bash en Windows o Terminal en macOS. Necesitas Git, Node.js 20 o superior y AWS CLI v2. Usa la versión compatible que ya tengas instalada. El archivo `.nvmrc` propone Node 22, la versión que ejecuta Lambda en AWS.
