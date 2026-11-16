@@ -20,8 +20,8 @@ crearEvento:
 
 | Abre en este orden | Qué ocurre |
 | --- | --- |
-| [Handler](src/eventos/crear-evento/handler.mjs) | Recibe `eventId` y `title` y llama a `crearEvento(eventId, title)`. |
-| [Service](src/eventos/crear-evento/service.mjs) | Comprueba que el ID sea un entero positivo y que el título tenga texto. Llama a `guardarEvento`. |
+| [Handler](src/eventos/crear-evento/handler.mjs) | Recibe `eventId` y `title` y llama a `crearEventoService(eventId, title)`. |
+| [Service](src/eventos/crear-evento/service.mjs) | Comprueba que el ID sea un entero positivo y que el título tenga texto. Llama a `crearEventoRepository`. |
 | [Repository](src/eventos/crear-evento/repository.mjs) | Usa `PutItemCommand` de DynamoDB Toolbox. La condición de escritura protege el ID de un evento existente. |
 | [Modelo Evento](src/eventos/persistencia/evento.model.mjs) | Transforma `eventId` y `title` en `EVENT_ID` y `TITLE`. DynamoDB usa `EVENT_ID` como clave de partición numérica. |
 

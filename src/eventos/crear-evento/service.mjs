@@ -1,6 +1,6 @@
-import { guardarEvento } from './repository.mjs';
+import { crearEventoRepository } from './repository.mjs';
 
-export async function crearEvento(eventId, title) {
+export async function crearEventoService(eventId, title) {
   if (!Number.isSafeInteger(eventId) || eventId < 1) {
     throw new Error('Indica un ID de evento entero positivo');
   }
@@ -8,6 +8,6 @@ export async function crearEvento(eventId, title) {
     throw new Error('Escribe un título para el evento');
   }
 
-  await guardarEvento(eventId, title);
+  await crearEventoRepository(eventId, title);
   return { eventId, title };
 }

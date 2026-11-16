@@ -1,5 +1,5 @@
-import { crearEvento } from './service.mjs';
+import { crearEventoService } from './service.mjs';
 
 export function handler({ eventId, title } = {}) {
-  return crearEvento(eventId, title);
+  return crearEventoService(eventId, title);
 }
