@@ -1,17 +1,17 @@
-import { PutCommand } from '@aws-sdk/lib-dynamodb';
-import { db, TABLA_EVENTOS_FCI } from '../../datos/dynamo.mjs';
+import { PutItemCommand } from 'dynamodb-toolbox/entity/actions/put';
+import { MODELO_EVENTO } from '../evento.model.mjs';
 
 export async function guardarEvento(eventId, title) {
-  const itemEvento = {
-    EVENT_ID: eventId,
-    TITLE: title
+  const evento = {
+    eventId,
+    title
   };
 
-  const comando = new PutCommand({
-    TableName: TABLA_EVENTOS_FCI,
-    Item: itemEvento,
-    ConditionExpression: 'attribute_not_exists(EVENT_ID)'
-  });
+  const comando = MODELO_EVENTO.build(PutItemCommand)
+    .item(evento)
+    .options({
+      condition: { attr: 'eventId', exists: false }
+    });
 
-  await db.send(comando);
+  await comando.send();
 }

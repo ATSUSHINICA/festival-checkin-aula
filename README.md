@@ -15,7 +15,7 @@ npm ci
 npm test
 ```
 
-La prueba local pasa por los cuatro handlers con DynamoDB simulado. Comprueba la consulta sin pase, el alta, el conflicto al repetir y la lectura posterior.
+La prueba local pasa por los cuatro handlers y genera los comandos reales de DynamoDB Toolbox. El envío a DynamoDB se simula. Comprueba la consulta sin pase, el alta, el conflicto al repetir y la lectura posterior.
 
 ## 2. Configura tu sesión
 
@@ -51,7 +51,7 @@ npm run aula
 
 Para una instalación nueva, verás **GET 200 → POST 201 → POST 409 → GET 200**. El comando carga el evento 1 y a `usuario-02` y muestra la URL de la API al final. Si repites la prueba, ya existe el mismo pase y el POST devuelve 409.
 
-Abre la [pantalla del festival](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#pantalla), elige **AWS**, pega la URL y consulta el evento **1** para **usuario-02**. El pase del ensayo en AWS figura como **Inscrito**.
+Abre la [pantalla del festival](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#pantalla), elige **AWS**, pega la URL y consulta el evento **1** para **usuario-02**. El pase del usuario figura como **Inscrito**.
 
 ## 4. Sigue el código desde la petición hasta DynamoDB
 
@@ -61,6 +61,7 @@ Abre la [pantalla del festival](https://albertohdezakkari.github.io/04-PILARES-S
 | `src/pases/consultar-pase/handler.mjs` | La entrada de API Gateway llama al caso de uso de consulta. |
 | `src/pases/consultar-pase/service.mjs` | Lee el evento y después el pase. Antes de inscribirse, `registration` vale `null`. |
 | `src/pases/inscribir-usuario/service.mjs` y `repository.mjs` | Comprueban las referencias y guardan la inscripción con una condición que protege frente a duplicados. |
+| `src/eventos/evento.model.mjs` y `src/pases/inscripcion.model.mjs` | DynamoDB Toolbox traduce `eventId` a `EVENT_ID` y `userId` a `USER_ID` sin cambiar las claves de las tablas. |
 | `src/datos/dynamo.mjs` | El cliente del SDK comparte la conexión y lee los nombres de tablas que inyecta Serverless. |
 
-El [cuaderno visual](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#leer-pase) permite seguir el mismo caso de uso por capas.
+Sigue en el cuaderno los pasos [Crear con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos-orm), [Consultar con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm) e [Inscribir con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm). El alta del perfil y la lectura de usuario conservan el SDK directo, tal como se muestran en el cuaderno.

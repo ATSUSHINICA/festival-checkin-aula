@@ -20,10 +20,15 @@ test('Alta, consulta e inscripción a través de los cuatro handlers', async con
       return { Item: datos.get(clave(input.TableName, input.Key)) };
     }
     assert.equal(constructor.name, 'PutCommand');
-    assert.match(input.ConditionExpression, /^attribute_not_exists\((EVENT_ID|USER_ID)\)$/);
+    const condition = /^attribute_not_exists\(([#\w]+)\)$/.exec(input.ConditionExpression);
+    assert.ok(condition);
+    const atributo = input.ExpressionAttributeNames?.[condition[1]] ?? condition[1];
+    assert.equal(atributo, input.TableName === 'USUARIOS' ? 'USER_ID' : 'EVENT_ID');
     const key = clave(input.TableName, input.Item);
     if (datos.has(key)) throw Object.assign(new Error('Duplicado'), { name: 'ConditionalCheckFailedException' });
-    datos.set(key, input.Item);
+    const item = { ...input.Item };
+    if (typeof item.EVENT_ID === 'bigint') item.EVENT_ID = Number(item.EVENT_ID);
+    datos.set(key, item);
     return {};
   });
 
@@ -48,6 +53,12 @@ test('Alta, consulta e inscripción a través de los cuatro handlers', async con
   const pase = JSON.parse(despues.body);
   assert.equal(pase.title, 'Festival de otoño');
   assert.equal(pase.registration.userId, 'usuario-02');
-  assert.equal(pase.registration.eventId, '1');
+  assert.equal(pase.registration.eventId, 1);
+  assert.deepEqual(datos.get(clave('EVENTOS', { EVENT_ID: 1 })), {
+    EVENT_ID: 1, TITLE: 'Festival de otoño'
+  });
+  assert.deepEqual(datos.get(clave('INSCRIPCIONES', { EVENT_ID: 1, USER_ID: 'usuario-02' })), {
+    EVENT_ID: 1, USER_ID: 'usuario-02', REGISTERED_AT: pase.registration.registeredAt
+  });
   assert.ok(pase.registration.registeredAt);
 });

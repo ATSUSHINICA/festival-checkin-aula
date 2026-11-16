@@ -1,18 +1,11 @@
-import { GetCommand } from '@aws-sdk/lib-dynamodb';
-import { db, TABLA_INSCRIPCIONES_FCI } from '../../datos/dynamo.mjs';
+import { GetItemCommand } from 'dynamodb-toolbox/entity/actions/get';
+import { MODELO_INSCRIPCION } from '../inscripcion.model.mjs';
 
 export async function buscarInscripcion(eventId, userId) {
-  const { Item } = await db.send(new GetCommand({
-    TableName: TABLA_INSCRIPCIONES_FCI,
-    Key: { EVENT_ID: eventId, USER_ID: userId },
-    ConsistentRead: true
-  }));
-  if (!Item) return null;
+  const { Item } = await MODELO_INSCRIPCION.build(GetItemCommand)
+    .key({ eventId, userId })
+    .options({ consistent: true })
+    .send();
 
-  return {
-    eventId: Item.EVENT_ID,
-    userId: Item.USER_ID,
-    registeredAt: Item.REGISTERED_AT,
-    checkedInAt: Item.CHECKED_IN_AT
-  };
+  return Item ?? null;
 }
