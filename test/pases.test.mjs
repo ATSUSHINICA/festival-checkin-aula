@@ -8,6 +8,7 @@ process.env.FCI_TABLA_INSCRIPCIONES = 'INSCRIPCIONES';
 
 const { db } = await import('../src/datos/dynamo.mjs');
 const { handler: crearEvento } = await import('../src/eventos/crear-evento/handler.mjs');
+const { handler: listarEventos } = await import('../src/eventos/listar-eventos/handler.mjs');
 const { handler: crearUsuario } = await import('../src/usuarios/crear-usuario/handler.mjs');
 const { handler: consultar } = await import('../src/inscripciones/consultar-inscripcion/handler.mjs');
 const { handler: inscribir } = await import('../src/inscripciones/inscribir-usuario/handler.mjs');
@@ -61,4 +62,35 @@ test('Alta, consulta e inscripción a través de los cuatro handlers', async con
     EVENT_ID: 1, USER_ID: 'usuario-02', REGISTERED_AT: pase.registration.registeredAt
   });
   assert.ok(pase.registration.registeredAt);
+});
+
+test('Listado de eventos continúa desde el cursor de DynamoDB', async context => {
+  const claveContinuacion = 9007199254740993n;
+  const scan = context.mock.method(db, 'send', async ({ input, constructor }) => {
+    assert.equal(constructor.name, 'ScanCommand');
+    assert.equal(input.TableName, 'EVENTOS');
+    assert.equal(input.Limit, 25);
+
+    if (!input.ExclusiveStartKey) {
+      return {
+        Items: [{ EVENT_ID: claveContinuacion, TITLE: 'Concierto de aula' }],
+        LastEvaluatedKey: { EVENT_ID: claveContinuacion }
+      };
+    }
+
+    assert.deepEqual(input.ExclusiveStartKey, { EVENT_ID: claveContinuacion });
+    return { Items: [{ EVENT_ID: 4, TITLE: 'Festival' }] };
+  });
+
+  const primera = await listarEventos({});
+  assert.deepEqual(primera, {
+    eventos: [{ eventId: '9007199254740993', title: 'Concierto de aula' }],
+    siguienteCursor: '9007199254740993'
+  });
+  const segunda = await listarEventos({ cursor: primera.siguienteCursor });
+  assert.deepEqual(segunda, {
+    eventos: [{ eventId: '4', title: 'Festival' }],
+    siguienteCursor: null
+  });
+  assert.equal(scan.mock.callCount(), 2);
 });

@@ -1,6 +1,6 @@
 # 2 · Crear un usuario
 
-**En el cuaderno web** · [Programar Lambda](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#archivo-lambda) (elige **Usuarios · handler.mjs**) · [Invocar crearUsuario](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#sembrar-usuarios)
+**En el cuaderno web** · [Programar Lambda](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#archivo-lambda) (elige **Usuarios · handler.mjs**) · [Invocar crearUsuario](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#sembrar-usuarios) · [Pestaña Invoke](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invoke-crear-usuario)
 
 **Objetivo.** Guarda el perfil ficticio que se inscribirá al evento del paso anterior.
 

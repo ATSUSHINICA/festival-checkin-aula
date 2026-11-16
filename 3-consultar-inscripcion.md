@@ -1,6 +1,6 @@
 # 3 · Consultar una inscripción
 
-**En el cuaderno web** · [Consultar inscripción por capas](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#leer-pase) · [Consultar inscripción con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm)
+**En el cuaderno web** · [Consultar inscripción por capas](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#leer-pase) · [Consultar inscripción con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm) · [Pestaña Invoke](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invoke-consultar-inscripcion)
 
 **Objetivo.** Sigue una petición GET por las capas y comprueba que la respuesta contiene `registration: null` si el evento existe y el usuario todavía no está inscrito.
 

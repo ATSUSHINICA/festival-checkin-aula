@@ -40,6 +40,9 @@ functions:
   crearEvento:
     name: ${self:service}-${self:provider.stage}-crearEvento
     handler: src/eventos/crear-evento/handler.handler
+  listarEventos:
+    name: ${self:service}-${self:provider.stage}-listarEventos
+    handler: src/eventos/listar-eventos/handler.handler
   crearUsuario:
     name: ${self:service}-${self:provider.stage}-crearUsuario
     handler: src/usuarios/crear-usuario/handler.handler

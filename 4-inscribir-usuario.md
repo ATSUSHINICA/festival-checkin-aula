@@ -1,6 +1,6 @@
 # 4 · Inscribir a un usuario
 
-**En el cuaderno web** · [Inscribir por capas](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#construir-post) · [Inscribir con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm)
+**En el cuaderno web** · [Inscribir por capas](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#construir-post) · [Inscribir con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm) · [Pestaña Invoke](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invoke-inscribir-usuario)
 
 **Objetivo.** Usa el mismo evento y el mismo usuario para crear una inscripción, comprobar que se conserva y detectar una petición duplicada.
 
