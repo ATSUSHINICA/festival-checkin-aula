@@ -8,7 +8,7 @@ process.env.FCI_TABLA_INSCRIPCIONES = 'INSCRIPCIONES';
 
 const { db } = await import('../src/datos/dynamo.mjs');
 const { handler: crearEvento } = await import('../src/eventos/crear-evento/handler.mjs');
-const { handler: listarEventos } = await import('../src/eventos/listar-eventos/handler.mjs');
+const { listarEventosHandler: listarEventos } = await import('../src/eventos/listar-eventos/handler.mjs');
 const { handler: crearUsuario } = await import('../src/usuarios/crear-usuario/handler.mjs');
 const { handler: consultar } = await import('../src/inscripciones/consultar-inscripcion/handler.mjs');
 const { handler: inscribir } = await import('../src/inscripciones/inscribir-usuario/handler.mjs');
