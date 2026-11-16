@@ -1,0 +1,116 @@
+service: festival-check-in
+frameworkVersion: "4.45.0"
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  region: ${env:AWS_REGION}
+  stage: ${env:FCI_EQUIPO}
+  iam:
+    role: ${env:LAMBDA_ROLE_ARN}
+  environment:
+    FCI_TABLA_EVENTOS:
+      Ref: FestivalCheckInEventos
+    FCI_TABLA_INSCRIPCIONES:
+      Ref: FestivalCheckInInscripciones
+    FCI_TABLA_USUARIOS:
+      Ref: FestivalCheckInUsuarios
+  httpApi:
+    payload: '2.0'
+    cors:
+      allowedOrigins:
+        - https://albertohdezakkari.github.io
+      allowedHeaders:
+        - Content-Type
+      allowedMethods:
+        - GET
+        - POST
+
+build:
+  esbuild: false
+
+package:
+  patterns:
+    - "!scripts/**"
+    - "!test/**"
+    - "!README.md"
+    - "!.env*"
+
+functions:
+  crearEvento:
+    name: ${self:service}-${sls:stage}-crearEvento
+    handler: src/eventos/crear-evento/handler.handler
+  crearUsuario:
+    name: ${self:service}-${sls:stage}-crearUsuario
+    handler: src/usuarios/crear-usuario/handler.handler
+  consultarPase:
+    handler: src/pases/consultar-pase/handler.handler
+    events:
+      - httpApi:
+          method: GET
+          path: /events/{eventId}/registrations/{userId}
+  inscribirUsuario:
+    handler: src/pases/inscribir-usuario/handler.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /events/{eventId}/registrations/{userId}
+
+resources:
+  Resources:
+    FestivalCheckInEventos:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: FCI_EVENTOS_${sls:stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: EVENT_ID
+            AttributeType: N
+        KeySchema:
+          - AttributeName: EVENT_ID
+            KeyType: HASH
+    FestivalCheckInInscripciones:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: FCI_INSCRIPCIONES_${sls:stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: EVENT_ID
+            AttributeType: N
+          - AttributeName: USER_ID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: EVENT_ID
+            KeyType: HASH
+          - AttributeName: USER_ID
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: PorUsuario
+            KeySchema:
+              - AttributeName: USER_ID
+                KeyType: HASH
+              - AttributeName: EVENT_ID
+                KeyType: RANGE
+            Projection:
+              ProjectionType: KEYS_ONLY
+    FestivalCheckInUsuarios:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: FCI_USUARIOS_${sls:stage}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: USER_ID
+            AttributeType: S
+        KeySchema:
+          - AttributeName: USER_ID
+            KeyType: HASH
+  Outputs:
+    NombreTablaEventosFCI:
+      Value:
+        Ref: FestivalCheckInEventos
+    NombreTablaInscripcionesFCI:
+      Value:
+        Ref: FestivalCheckInInscripciones
+    NombreTablaUsuariosFCI:
+      Value:
+        Ref: FestivalCheckInUsuarios
