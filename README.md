@@ -12,6 +12,7 @@ Usa el mismo evento y usuario de principio a fin. En cada caso, abre primero `se
 | --- | --- | --- |
 | Preparar AWS y desplegar | [Configurar desde cero](0-conf.md) | [Preparar AWS Academy](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#iniciar-lab) |
 | Guardar un evento por capas con DynamoDB Toolbox | [Crear un evento](1-crear-evento.md) | [Crear con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos-orm) · [Infografía de Crear un evento](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/traza-evento/#infografia) |
+| Buscar el evento guardado por su ID | [Invocar buscarEvento](1-crear-evento.md#busca-el-evento-desde-lambda) | [Invoke · Buscar evento](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#invoke-buscar-evento) |
 | Preparar el perfil que se inscribirá | [Crear un usuario](2-crear-usuario.md) | [Invocar crearUsuario](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#sembrar-usuarios) |
 | Leer el evento y observar el pase antes de inscribir | [Consultar una inscripción](3-consultar-inscripcion.md) | [Consultar inscripción con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm) |
 | Crear la relación, comprobar el 409 y leer la fecha | [Inscribir a un usuario](4-inscribir-usuario.md) | [Inscribir con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm) |
@@ -82,15 +83,15 @@ Abre la [pantalla del festival](https://albertohdezakkari.github.io/04-PILARES-S
 
 ## 4. Sigue el código desde la petición hasta DynamoDB
 
-En `src/eventos/crear-evento/` están los archivos del alta. En `src/eventos/buscar-evento/` están el service y el repository de lectura que reutilizan **Consultar inscripción** e **Inscribir usuario**. El modelo que comparten el alta y la lectura vive en `src/eventos/models/`. En `src/inscripciones/` están los casos **Consultar inscripción** e **Inscribir usuario**, que trabajan con `FCI_INSCRIPCIONES`. Sus handlers comparten `http/peticion.mjs` para preparar la llamada al service y responder a API Gateway. Su modelo de DynamoDB Toolbox está en `models/`.
+En `src/eventos/crear-evento/` están los archivos del alta. En `src/eventos/buscar-evento/` están el handler para invocar la búsqueda directamente y el service y repository que también usan **Consultar inscripción** e **Inscribir usuario**. El modelo que comparten el alta y la lectura vive en `src/eventos/models/`. En `src/inscripciones/` están los casos **Consultar inscripción** e **Inscribir usuario**, que trabajan con `FCI_INSCRIPCIONES`. Sus handlers comparten `http/peticion.mjs` para preparar la llamada al service y responder a API Gateway. Su modelo de DynamoDB Toolbox está en `models/`.
 
 | Abre | Qué buscar |
 | --- | --- |
-| `serverless.yml` | Las cuatro funciones, las rutas GET y POST, las tres tablas y el índice `PorUsuario`. Los nombres de tabla llevan el código del equipo. |
+| `serverless.yml` | Las seis funciones, las rutas GET y POST, las tres tablas y el índice `PorUsuario`. Los nombres de tabla llevan el código del equipo. |
 | `src/inscripciones/consultar-inscripcion/handler.mjs` | La entrada de API Gateway llama al caso de uso de consulta. |
 | `src/inscripciones/consultar-inscripcion/service.mjs` | Lee el evento y después el pase. Antes de inscribirse, `registration` vale `null`. |
 | `src/inscripciones/inscribir-usuario/service.mjs` y `repository.mjs` | Comprueban las referencias y guardan la inscripción con una condición que protege frente a duplicados. |
 | `src/eventos/models/evento.model.mjs` y `src/inscripciones/models/inscripcion.model.mjs` | DynamoDB Toolbox traduce `eventId` a `EVENT_ID` y `userId` a `USER_ID` sin cambiar las claves de las tablas. |
 | `src/datos/dynamo.mjs` | El cliente del SDK comparte la conexión y lee los nombres de tablas que inyecta Serverless. |
 
-Sigue en el cuaderno los pasos [Crear con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos-orm), [Consultar inscripción con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm) e [Inscribir con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm). El alta del perfil y la lectura de usuario conservan el SDK directo, tal como se muestran en el cuaderno.
+Sigue en el cuaderno los pasos [Crear con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#capas-eventos-orm), [Consultar inscripción con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#consultar-orm) e [Inscribir con ORM](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#inscribir-orm). El alta del perfil y la lectura por clave usan el modelo de usuario de DynamoDB Toolbox.

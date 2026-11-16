@@ -46,6 +46,22 @@ cat respuesta-evento.json
 
 Comprueba que la salida de la invocación no contiene `FunctionError` y que el JSON devuelve tu `eventId` y el título. El `StatusCode: 200` de AWS CLI indica que Lambda atendió la invocación. El JSON devuelto te permite comprobar el resultado de la función.
 
+## Busca el evento desde Lambda
+
+Después de desplegar el proyecto, reutiliza `evento_id` en la misma terminal. En [serverless.yml](serverless.yml), `functions → buscarEvento` conecta la Lambda con [buscarEventoHandler](src/eventos/buscar-evento/handler.mjs). El handler lee el número del JSON y llama a [buscarEventoService](src/eventos/buscar-evento/service.mjs). El [repository](src/eventos/buscar-evento/repository.mjs) recupera el ítem con `GetItemCommand` y `MODELO_EVENTO`.
+
+```bash
+aws lambda invoke \
+  --function-name "festival-check-in-${FCI_EQUIPO}-buscarEvento" \
+  --profile "$AWS_PROFILE" --region "$AWS_REGION" \
+  --cli-binary-format raw-in-base64-out \
+  --payload "{\"eventId\":${evento_id:?Ejecuta antes la Lambda crearEvento}}" \
+  respuesta-buscar-evento.json &&
+cat respuesta-buscar-evento.json
+```
+
+**Antes de avanzar.** Comprueba que la respuesta contiene tu `eventId` y el título «Concierto de aula». Si pruebas con un ID válido que no existe, la salida es `null`.
+
 ## Comprueba el ítem
 
 ```bash

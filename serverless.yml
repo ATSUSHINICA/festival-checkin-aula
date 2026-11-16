@@ -36,6 +36,9 @@ functions:
   crearEvento:
     name: ${self:service}-${self:provider.stage}-crearEvento
     handler: src/eventos/crear-evento/handler.handler
+  buscarEvento:
+    name: ${self:service}-${self:provider.stage}-buscarEvento
+    handler: src/eventos/buscar-evento/handler.buscarEventoHandler
   listarEventos:
     name: ${self:service}-${self:provider.stage}-listarEventos
     handler: src/eventos/listar-eventos/handler.listarEventosHandler

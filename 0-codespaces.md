@@ -1,6 +1,6 @@
 # 0 · Festival Check-in en GitHub Codespaces
 
-Abre el proyecto de la rama **`main`** en VS Code desde el navegador. Usarás la terminal de Codespaces para desplegar con **Serverless Framework 3.40.0**. Las cinco Lambdas, la API y las tres tablas DynamoDB se ejecutan en **AWS Academy**. [Configuración del proyecto](0-conf.md)
+Abre el proyecto de la rama **`main`** en VS Code desde el navegador. Usarás la terminal de Codespaces para desplegar con **Serverless Framework 3.40.0**. Las seis Lambdas, la API y las tres tablas DynamoDB se ejecutan en **AWS Academy**. [Configuración del proyecto](0-conf.md)
 
 ## 1. Abre el Codespace de main
 
