@@ -21,7 +21,7 @@ La prueba local pasa por los cuatro handlers y genera los comandos reales de Dyn
 
 ## 2. Configura tu sesión
 
-En AWS Academy, inicia **Learner Lab → Start Lab → AWS Details → AWS CLI**. Guarda las tres credenciales temporales en un perfil de tu archivo personal `~/.aws/credentials`. Si el bloque trae `[default]` y ya usas ese perfil para otra cuenta, ponle `[academy]`. Sigue estos pasos del [cuaderno de preparación](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#iniciar-lab).
+En AWS Academy, inicia **Learner Lab → Start Lab → AWS Details → AWS CLI**. Guarda las tres credenciales temporales en un perfil de tu archivo personal `~/.aws/credentials`. Usa la cabecera `[academy]` en minúsculas para el perfil del aula. Sigue estos pasos del [cuaderno de preparación](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#iniciar-lab).
 
 Desde la raíz del proyecto, cambia los valores de ejemplo por los de tu laboratorio. Cada equipo que comparta cuenta y región debe usar un código diferente de hasta 20 caracteres, en minúsculas, con números o guiones y empezando por una letra.
 
@@ -44,7 +44,7 @@ Si el laboratorio deniega `iam:GetRole`, exporta `LAMBDA_ROLE_ARN` con el ARN co
 
 ## 3. Despliega y prueba
 
-En la misma terminal, desde la raíz del repositorio:
+En la misma terminal, desde la raíz del repositorio. Si abriste otra, recupera las cuatro variables del [paso 4 de 0-conf.md](0-conf.md#4-configura-y-comprueba-tu-despliegue).
 
 ```bash
 npm run deploy -- --aws-profile "$AWS_PROFILE" &&

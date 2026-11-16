@@ -49,7 +49,7 @@ chmod 600 ~/.aws/credentials &&
 vi ~/.aws/credentials
 ```
 
-En `vi`, escribe `:set paste` y pulsa Intro. Si el perfil es nuevo, sitúate en una línea libre, pulsa `i` y pega el bloque. Ponle la cabecera `[academy]` si lo guardas como perfil nuevo. Si el perfil ya existe, sustituye sus tres valores en esa misma sección. Guarda con **Esc**, `:wq` e Intro.
+En `vi`, escribe `:set paste` y pulsa Intro. Si el perfil es nuevo, sitúate en una línea libre, pulsa `i` y pega el bloque. Usa la cabecera `[academy]` en minúsculas. Si el bloque copiado trae `[default]`, cambia esa cabecera en el bloque que vas a pegar. Si el perfil ya existe, sustituye sus tres valores en esa misma sección. Guarda con **Esc**, `:wq` e Intro.
 
 La sección debe contener `aws_access_key_id`, `aws_secret_access_key` y `aws_session_token`. Usa los tres valores de la misma sesión y guárdalos solo en el archivo personal `~/.aws/credentials`.
 
@@ -57,11 +57,11 @@ La sección debe contener `aws_access_key_id`, `aws_secret_access_key` y `aws_se
 aws configure list-profiles
 ```
 
-Identifica el perfil que acabas de guardar, por ejemplo `academy` o `default`. [Preparación visual en el cuaderno](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#iniciar-lab)
+La lista debe incluir `academy`. Si ya tenías la sesión del laboratorio guardada en `[default]`, puedes usar `default` en el paso siguiente. [Preparación visual en el cuaderno](https://albertohdezakkari.github.io/04-PILARES-SERVERLESS/practica/festival-checkin/#iniciar-lab)
 
 ## 4. Configura y comprueba tu despliegue
 
-Desde la raíz del proyecto, sustituye `academy` por el perfil que guardaste, ajusta la región a la del laboratorio y usa el código de equipo asignado. Si varios equipos comparten cuenta y región, cada uno utiliza un código distinto. El código empieza por una letra minúscula y admite hasta veinte caracteres entre minúsculas, números y guiones.
+Desde la raíz del proyecto, usa `academy` tal como aparece en la cabecera `[academy]`. Si usas `[default]`, cambia la primera línea a `export AWS_PROFILE=default`. Ajusta la región a la del laboratorio y usa el código de equipo asignado. Si varios equipos comparten cuenta y región, cada uno utiliza un código distinto. El código empieza por una letra minúscula y admite hasta veinte caracteres entre minúsculas, números y guiones.
 
 ```bash
 export AWS_PROFILE=academy
@@ -91,9 +91,13 @@ En `serverless.yml`, el código de equipo se convierte en el entorno de Serverle
 
 ## 5. Despliega y carga los datos de ejemplo
 
-Desde la raíz de `festival-checkin-01`, en la misma terminal:
+Desde la raíz de `festival-checkin-01`, en la misma terminal del paso 4. Si abriste otra, vuelve a ejecutar el paso 4 para recuperar las cuatro variables. El bloque comprueba que tengan valor antes de arrancar Serverless.
 
 ```bash
+: "${AWS_PROFILE:?Vuelve al paso 4 y exporta AWS_PROFILE}" &&
+: "${AWS_REGION:?Vuelve al paso 4 y exporta AWS_REGION}" &&
+: "${FCI_EQUIPO:?Vuelve al paso 4 y exporta FCI_EQUIPO}" &&
+: "${LAMBDA_ROLE_ARN:?Vuelve al paso 4 y exporta LAMBDA_ROLE_ARN}" &&
 npm run deploy -- --aws-profile "$AWS_PROFILE" &&
 npm run aula
 ```
