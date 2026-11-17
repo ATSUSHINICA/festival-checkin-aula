@@ -4,9 +4,23 @@ Clona el proyecto del profesor, sube la copia a tu cuenta de GitHub y abre Codes
 
 ## 1. Sube el proyecto a tu GitHub y abre tu Codespace
 
-### A. Clona el proyecto base en tu ordenador
+### A. Crea tu carpeta de trabajo
 
-Abre **Git Bash** en Windows o **Terminal** en macOS. Sitúate en la carpeta donde guardas tus proyectos y ejecuta:
+Abre **Git Bash** en Windows o **Terminal** en macOS. Crea la carpeta `proyectos-serverless` dentro de tu carpeta personal y entra en ella.
+
+```bash
+mkdir -p "$HOME/proyectos-serverless"
+cd "$HOME/proyectos-serverless"
+pwd
+```
+
+`mkdir -p` permite volver a usar la carpeta si ya existe. `pwd` muestra dónde estás.
+
+**Antes de clonar**, comprueba que la ruta que muestra `pwd` termina en `/proyectos-serverless`.
+
+### B. Clona el proyecto base en tu ordenador
+
+Desde `proyectos-serverless`, ejecuta estos comandos. `git clone` creará la subcarpeta `festival-checkin-aula` con el proyecto.
 
 ```bash
 git clone --branch main --single-branch https://github.com/albertohdezakkari/festival-checkin-01.git festival-checkin-aula
@@ -16,14 +30,14 @@ git remote -v
 
 Después de clonar, `origin` apunta al repositorio del profesor. Si ya existe una carpeta llamada `festival-checkin-aula`, elige otro nombre de carpeta en `git clone` y usa ese mismo nombre en `cd`.
 
-### B. Crea un repositorio vacío en tu cuenta
+### C. Crea un repositorio vacío en tu cuenta
 
 1. Inicia sesión en GitHub con **tu propia cuenta** y abre [New repository](https://github.com/new).
 2. En **Owner**, selecciona tu usuario. En **Repository name**, escribe `festival-checkin-aula` o el nombre que vayas a usar en clase.
 3. Pulsa **Create repository** con las opciones de README, `.gitignore` y licencia desactivadas. El clon ya tiene historial y archivos.
 4. En **Quick setup**, selecciona **HTTPS** y copia la URL de tu nuevo repositorio. Debe tener el formato `https://github.com/TU_USUARIO/TU_REPOSITORIO.git`. [Subir un proyecto existente a GitHub](https://docs.github.com/es/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github)
 
-### C. Cambia `origin` y sube `main`
+### D. Cambia `origin` y sube `main`
 
 En la misma terminal del ordenador, desde la carpeta del clon, ejecuta estas dos líneas. Pega la URL del repositorio que acabas de crear y pulsa **Intro**.
 
@@ -49,7 +63,7 @@ Si Git abre una ventana de autenticación, entra con la misma cuenta que usaste 
 
 **Antes de avanzar**, recarga tu repositorio en GitHub. Deben aparecer la rama `main` y los archivos `package.json` y `serverless.yml`.
 
-### D. Abre Codespaces desde tu repositorio
+### E. Abre Codespaces desde tu repositorio
 
 1. En la página de **tu repositorio**, elige la rama `main`.
 2. Pulsa **Code → Codespaces → Create codespace on main**. Si ya tienes un Codespace de este repositorio, puedes abrirlo desde esa misma pestaña. Si la opción no aparece, abre [New codespace](https://github.com/codespaces/new), selecciona tu repositorio y elige `main`. [Crear un Codespace desde una rama](https://docs.github.com/es/codespaces/developing-in-a-codespace/creating-a-codespace-for-a-repository)
