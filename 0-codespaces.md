@@ -6,7 +6,18 @@ Clona el proyecto del profesor, sube la copia a tu cuenta de GitHub y abre Codes
 
 ### A. Crea tu carpeta de trabajo
 
-Abre **Git Bash** en Windows o **Terminal** en macOS. Crea la carpeta `proyectos-serverless` dentro de tu carpeta personal y entra en ella.
+Abre **Git Bash** en Windows o **Terminal** en macOS. En las dos terminales, `$HOME` contiene la ruta de tu carpeta personal. Comprueba qué valor tiene en tu equipo:
+
+```bash
+printf '%s\n' "$HOME"
+```
+
+- **Windows con Git Bash.** Una salida habitual es `/c/Users/tu_usuario`.
+- **macOS con Terminal.** Una salida habitual es `/Users/tu_usuario`.
+
+Si estás en **CMD**, allí se escribe `%USERPROFILE%`. Para seguir los comandos de la práctica en Windows, abre **Git Bash**.
+
+Ahora crea `proyectos-serverless` dentro de tu carpeta personal y entra en ella.
 
 ```bash
 mkdir -p "$HOME/proyectos-serverless"
